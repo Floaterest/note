@@ -1,2 +1,3 @@
-# dep
-Dependency tree of UTSC Computer Science Courses
+# UofTears
+
+This is where I keep my notes
