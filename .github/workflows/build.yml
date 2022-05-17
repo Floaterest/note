@@ -22,7 +22,6 @@ jobs:
       - name: Clone Last Build
         run: |
           git pull
-          git rev-parse -q --verify origin/build
           make branch
       - name: Build HTML
         run: npm i && make -B
