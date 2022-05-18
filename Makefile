@@ -24,8 +24,7 @@ init: $(BUILD)
 checkout:
 	git fetch origin $(BUILD):$(BUILD)
 	git clone . $(BUILD)
-	tree -I node_modules
-	cd $(BUILD); tree -I node_modules; git checkout origin/$(BUILD)
+	cd $(BUILD); git checkout origin/$(BUILD)
 
 # create dir if needed
 $(BUILD):
@@ -38,7 +37,6 @@ $(HTML): $(BUILD)/%.html: $(SRC)/%.md
 $(POSTAMBLE): $(SRC)/script.js
 	echo "<script>" | cat - $? > $@
 	echo "</script>" >> $@
-	echo $(shell shuf -n1 -i0-10000000) >> $@
 
 $(PREAMBLE): $(SRC)/style.sass
 	npm run sass -- $? $(STYLE)
