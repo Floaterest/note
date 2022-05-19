@@ -3,22 +3,22 @@ const hidden = ' hidden';
 const toc = document.querySelector('#TOC');
 const isheader = tag => /h\d/.test(tag);
 
-function cmp(a,b){ // assume h1 > h2
+function cmp(a, b) { // assume h1 > h2
 	// same header level
-	if(a === b) return 0;
+	if (a === b) return 0;
 	// h1 > h2 => 1    h2 < h1 => -1
 	return (+a[1] < +b[1]) * 2 - 1;
 }
 
-function toggle(tag, element, hide){
-	if(!element) return;
+function toggle(tag, element, hide) {
+	if (!element) return;
 
 	const t = element.tagName.toLowerCase();
-	if(isheader(t) && cmp(tag, t) <= 0) return;
+	if (isheader(t) && cmp(tag, t) <= 0) return;
 
-	if(hide){
+	if (hide) {
 		element.className += hidden;
-	}else{
+	} else {
 		element.className = element.className.replace(hidden, '');
 	}
 	toggle(tag, element.nextElementSibling, hide);
@@ -33,6 +33,23 @@ headers.forEach(
 		element => element.onclick = () => toc.classList.toggle('show')
 	)
 );
+
+// no colgroup
+let deleted = false
+const del = col => { col.remove(); deleted = true };
+document.querySelectorAll('colgroup').forEach(del);
+if (!col) {
+	console.log('No colgroup were found!');
+}
+
+// click on header will hide all following elements until next header of same level
+// headers.forEach(
+// 	tag => document.querySelectorAll(tag + ':not(.title)').forEach(
+// 		element => element.onclick = ({target: { nextElementSibling } }) => {
+// 			toggle(tag, nextElementSibling, !nextElementSibling.className.includes('hidden'))
+// 		}
+// 	)
+// );
 // click on title to toggle all h1
 document.querySelector('h1.title').onclick = () => document.querySelectorAll('h1:not(.title)').forEach(h1 => h1.click());
 
