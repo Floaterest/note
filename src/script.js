@@ -1,5 +1,6 @@
 const headers = ['h1', 'h2', 'h3'];
 const hidden = ' hidden';
+const toc = document.querySelector('#TOC');
 const isheader = tag => /h\d/.test(tag);
 
 function cmp(a,b){ // assume h1 > h2
@@ -25,12 +26,11 @@ function toggle(tag, element, hide){
 
 // open all details
 document.querySelectorAll('details:not(.example)').forEach(e => e.open = true);
-// click on header will hide all following elements until next header of same level
+
+// hide/show table of contents
 headers.forEach(
 	tag => document.querySelectorAll(tag + ':not(.title)').forEach(
-		element => element.onclick = ({target: { nextElementSibling } }) => {
-			toggle(tag, nextElementSibling, !nextElementSibling.className.includes('hidden'))
-		}
+		element => element.onclick = () => toc.classList.toggle('show')
 	)
 );
 // click on title to toggle all h1
