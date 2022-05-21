@@ -81,6 +81,10 @@ html
     header#title-block-header
         display: flex
         justify-content: center
+    p, header, ul, ol, pre
+        margin: 0
+    ul, ol
+        padding-left: $pad * 2
     h1:not(.title)
         border-bottom: 1px solid
     h1, h2, h3
@@ -100,10 +104,6 @@ html
     blockquote
         +quote($yellow)
         color: rgba($color, 0.75) !important
-    p, header
-        margin: 0
-    ul
-        padding-left: $pad * 2
     table
         border-collapse: collapse
         tbody > tr:not(:first-child)
@@ -114,7 +114,6 @@ html
             padding: 0.5em
     pre
         background: $darker
-        margin: 0
         & > code
             display: block
             padding-top: 5px
