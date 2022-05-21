@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "dev": "live-server build --no-browser",
+        "sass": "sass --no-source-map"
+    },
+    "devDependencies": {
+        "sass": "^1.50.0"
+    }
+}
