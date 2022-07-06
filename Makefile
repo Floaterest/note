@@ -15,7 +15,7 @@ else
 endif
 
 .PHONY: all branch checkout init
-all: $(preamble) $(HTML)
+all: $(build)/script.js $(build)/style.css $(HTML)
 branch: $(UPDATE)
 init: $(build)
 checkout:
