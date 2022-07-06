@@ -1,7 +1,6 @@
 SRC = src
-AUX = aux
+AUX = auxiliary
 BUILD = build
-# BUILD = pages
 
 STYLE = $(AUX)/style.css
 PREAMBLE = $(AUX)/preamble.html
