@@ -34,5 +34,5 @@ $(HTML): $(build)/%.html: $(src)/%.md
 $(build)/script.js: $(src)/script.js
 	cp $? $@
 
-$(build)/style.css: $(src)/style.sass
+$(build)/style.css: $(src)/styles/style.sass
 	npm run sass -- $? $@
