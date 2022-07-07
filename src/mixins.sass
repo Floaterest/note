@@ -1,0 +1,37 @@
+@function half($value)
+    @return $value * 0.5
+
+@mixin darken-background($accent)
+    background: rgba($accent, 0.10)
+
+@mixin pad
+    padding: half($pad) $pad
+
+@mixin quote($accent)
+    +pad()
+    margin: 0
+    border-left: $border-left solid $accent
+    +darken-background($accent)
+
+@mixin framed($selector, $accent)
+    &.#{$selector}
+        +quote($accent)
+        padding-top: 0
+        strong, .textbf
+            color: $accent
+        summary
+            cursor: pointer
+        & > summary
+            +pad()
+            +darken-background($accent)
+            display: block
+            margin-left: -$pad
+            margin-right: -$pad
+
+@mixin prefixed($selector, $accent)
+    +framed($selector, $accent)
+    &.#{$selector} > summary::before
+        content: "#{$selector}."
+        text-transform: capitalize
+        font-weight: bold
+        color: $accent
