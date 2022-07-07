@@ -1,0 +1,64 @@
+@import "colors"
+@import "mixins"
+
+$proportional: 'source sans pro', arial
+$monospaced: 'iosevka custom extended', consolas
+
+$pad: 1em
+$font: 20px
+$border-left: 0.25em
+
+
+html
+    font-family: $proportional, $monospaced, 'UD Digi Kyokasho NK-R', sans-serif
+    font-size: $font
+    background: $background
+    color: $color
+    body
+        padding-bottom: 30em
+    header#title-block-header
+        display: flex
+        justify-content: center
+    p, header, dl, ul, ol, pre
+        margin: 0
+    ul, ol
+        padding-left: $pad * 2
+    h1:not(.title)
+        border-bottom: 1px solid
+    h1, h2, h3
+        color: $yellow
+        margin: 0.5em 0
+        cursor: pointer
+        user-select: none
+    a
+        color: $yellow
+        text-decoration: none
+        &:visited
+            color: $yellow
+        &:hover
+            color: $color
+            text-decoration: underline
+            background: $darker
+    blockquote
+        +quote($yellow)
+        color: rgba($color, 0.75) !important
+    table
+        border-collapse: collapse
+        tbody > tr:not(:first-child)
+            border-top: 1px solid $light
+        thead
+            border-bottom: 1px solid $color !important
+        td,th
+            padding: 0.5em
+    pre
+        background: $darker
+        & > code
+            display: block
+            padding-top: 5px
+            padding-bottom: 5px
+    code
+        color: $color
+        padding: 0 5px
+        line-height: 1.3
+        font-family: $monospaced
+
