@@ -19,12 +19,9 @@ jobs:
 
       - name: Install Pandoc
         run: python3 pandoc.py && pandoc --version
-      - name: Clone Last Build
-        run: |
-          git pull
-          make branch
+
       - name: Build HTML
-        run: npm i && make -B
+        run: npm i && make
 
       - name: Deploy to Github Pages
         run : |
