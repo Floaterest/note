@@ -1,15 +1,16 @@
 @import "colors"
 @import "mixins"
+@import "fonts"
 
-$font: 'source sans pro'
-$mono: 'iosevka custom extended', consolas
+$font: roboto
+$cjk: 'UD Digi Kyokasho NK-R', kosugi
+$mono: iosevka, consolas
 
 $pad: 1em
 $border-left: 0.25em
 
-
 html
-    font-family: $font, $mono, 'UD Digi Kyokasho NK-R', sans-serif
+    font-family: $font, $mono, $cjk, sans-serif
     font-size: 20px
     background: $background
     color: $color
