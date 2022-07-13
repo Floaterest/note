@@ -1,43 +1,38 @@
-SRC = src
-AUX = auxiliary
-BUILD = build
+src = src
+build = build
 
-STYLE = $(AUX)/style.css
-PREAMBLE = $(AUX)/preamble.html
-POSTAMBLE = $(AUX)/postamble.html
-HIGHLIGHT = $(SRC)/highlight.theme
+preamble = $(src)/preamble.html
+highlight = $(src)/highlight.theme
 
-MD := $(wildcard $(SRC)/*.md)
-HTML := $(addprefix $(BUILD)/,$(notdir $(MD:.md=.html)))
+MD := $(wildcard $(src)/*.md)
+HTML := $(addprefix $(build)/,$(notdir $(MD:.md=.html)))
+pandoc := pandoc -f markdown+markdown_in_html_blocks -t html5 --highlight-style $(highlight) -s --katex
 
-ifneq ($(shell git rev-parse -q --verify origin/$(BUILD); echo $$?),1)
+ifneq ($(shell git rev-parse -q --verify origin/$(build); echo $$?),1)
 	UPDATE = checkout
 else
 	UPDATE = init
 endif
 
 .PHONY: all branch checkout init
-all: $(PREAMBLE) $(POSTAMBLE) $(HTML)
+all: $(preamble) $(HTML)
 branch: $(UPDATE)
-init: $(BUILD)
+init: $(build)
 checkout:
-	git fetch origin $(BUILD):$(BUILD)
-	git clone . $(BUILD)
-	cd $(BUILD); git checkout origin/$(BUILD)
+	git fetch origin $(build):$(build)
+	git clone . $(build)
+	cd $(build); git checkout origin/$(build)
 
 # create dir if needed
-$(BUILD):
-	mkdir $(BUILD)
+$(build):
+	mkdir $(build)
 
-$(HTML): $(BUILD)/%.html: $(SRC)/%.md
-	pandoc -f markdown+markdown_in_html_blocks -t html5 --highlight-style $(HIGHLIGHT) -A $(POSTAMBLE) -H $(PREAMBLE) -s --katex -o $@ $?
+$(HTML): $(build)/%.html: $(src)/%.md
+	$(pandoc) -H $(preamble) -o $@ $?
 # 	pandoc -c style.css
 
-$(POSTAMBLE): $(SRC)/script.js
-	echo "<script>" | cat - $? > $@
-	echo "</script>" >> $@
+$(build)/script.js: $(src)/script.js
+	cp $? $@
 
-$(PREAMBLE): $(SRC)/style.sass
-	npm run sass -- $? $(STYLE)
-	echo "<style>" | cat - $(STYLE) > $@
-	echo "</style>" >> $@
+$(build)/style.css: $(src)/style.sass
+	npm run sass -- $? $@
