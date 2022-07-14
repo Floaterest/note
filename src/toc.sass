@@ -1,0 +1,17 @@
+@import "colors"
+    
+#TOC
+    position: fixed
+    top: 0
+    left: 0
+    z-index: 1
+    height: 100%
+    display: none
+    direction: rtl
+    overflow-y: scroll
+    background: rgba($black, 0.875)
+    & > ul
+        margin: 1em
+        direction: ltr
+    &.show
+        display: unset
