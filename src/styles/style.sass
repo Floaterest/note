@@ -13,3 +13,15 @@
         border-right: 1px solid $color
         font-weight: bold
 
+@function border()
+    @return 1px solid $lighter
+
+
+.right
+    border-right: border()
+.high
+    border-top: border()
+    border-radius: 3px
+.low
+    border-bottom: border()
+    border-radius: 3px
