@@ -1,3 +1,3 @@
-# UofTears
+# Notes
 
-This is where I keep my notes
+This is where I keep my portable notes
