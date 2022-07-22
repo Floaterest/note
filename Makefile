@@ -1,44 +1,33 @@
-SRC = src
-AUX = aux
-BUILD = build
-# BUILD = pages
+src := src
+build := build
+notes := notes
 
-STYLE = $(AUX)/style.css
-PREAMBLE = $(AUX)/preamble.html
-POSTAMBLE = $(AUX)/postamble.html
-HIGHLIGHT = $(SRC)/highlight.theme
+preamble = $(src)/preamble.html
+highlight = $(src)/highlight.theme
+filter = tikz.lua
 
-MD := $(wildcard $(SRC)/*.md)
-HTML := $(addprefix $(BUILD)/,$(notdir $(MD:.md=.html)))
+markdown := $(wildcard $(notes)/*.md)
+html := $(addprefix $(build)/,$(notdir $(markdown:.md=.html)))
+fonts := $(addprefix $(build)/,$(notdir $(wildcard $(src)/fonts/*.woff2)))
+pandoc := pandoc -f markdown+markdown_in_html_blocks -t html5 --lua-filter $(filter) --highlight-style $(highlight) -s --katex --toc
 
-ifneq ($(shell git rev-parse -q --verify origin/$(BUILD); echo $$?),1)
-	UPDATE = checkout
-else
-	UPDATE = init
-endif
+.PHONY: all 
 
-.PHONY: all branch checkout init
-all: $(PREAMBLE) $(POSTAMBLE) $(HTML)
-branch: $(UPDATE)
-init: $(BUILD)
-checkout:
-	git fetch origin $(BUILD):$(BUILD)
-	git clone . $(BUILD)
-	cd $(BUILD); git checkout origin/$(BUILD)
+all: $(build)/style.css $(build)/script.js $(fonts) $(html)
 
-# create dir if needed
-$(BUILD):
-	mkdir $(BUILD)
+# copy fonts
+$(fonts): $(build)/%.woff2: $(src)/fonts/%.woff2
+	cp $? $@
 
-$(HTML): $(BUILD)/%.html: $(SRC)/%.md
-	pandoc -f markdown+markdown_in_html_blocks -t html5 --highlight-style $(HIGHLIGHT) -A $(POSTAMBLE) -H $(PREAMBLE) -s --katex -o $@ $?
-# 	pandoc -c style.css
+# build each html
+$(html): $(build)/%.html: $(notes)/%.md
+# 	$(pandoc) -H $(preamble) -o $@ $?
+	$(pandoc) -H $(preamble) -c style.css -o $@ $?
 
-$(POSTAMBLE): $(SRC)/script.js
-	echo "<script>" | cat - $? > $@
-	echo "</script>" >> $@
+# copy script
+$(build)/script.js: $(src)/script.js
+	cp $? $@
 
-$(PREAMBLE): $(SRC)/style.sass
-	npm run sass -- $? $(STYLE)
-	echo "<style>" | cat - $(STYLE) > $@
-	echo "</style>" >> $@
+# build style
+$(build)/style.css: $(src)/styles/*.sass
+	npm run sass -- $(src)/styles/style.sass $@
