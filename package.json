@@ -5,6 +5,6 @@
     },
     "devDependencies": {
         "live-server": "^1.2.2",
-        "sass": "^1.50.0"
+        "sass": "^1.52.3"
     }
 }
