@@ -4,11 +4,12 @@ notes := notes
 
 preamble = $(src)/preamble.html
 highlight = $(src)/highlight.theme
+filter = tikz.lua
 
 markdown := $(wildcard $(notes)/*.md)
 html := $(addprefix $(build)/,$(notdir $(markdown:.md=.html)))
 fonts := $(addprefix $(build)/,$(notdir $(wildcard $(src)/fonts/*.woff2)))
-pandoc := pandoc -f markdown+markdown_in_html_blocks -t html5 --highlight-style $(highlight) -s --katex --toc
+pandoc := pandoc -f markdown+markdown_in_html_blocks -t html5 --lua-filter $(filter) --highlight-style $(highlight) -s --katex --toc
 
 .PHONY: all 
 
