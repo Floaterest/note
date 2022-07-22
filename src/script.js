@@ -1,55 +1,63 @@
-const headers = ['h1', 'h2', 'h3'];
-const hidden = ' hidden';
-const toc = document.querySelector('#TOC');
-const isheader = tag => /h\d/.test(tag);
-
-function cmp(a, b) { // assume h1 > h2
-	// same header level
-	if (a === b) return 0;
-	// h1 > h2 => 1    h2 < h1 => -1
-	return (+a[1] < +b[1]) * 2 - 1;
-}
-
-function toggle(tag, element, hide) {
-	if (!element) return;
-
-	const t = element.tagName.toLowerCase();
-	if (isheader(t) && cmp(tag, t) <= 0) return;
-
-	if (hide) {
-		element.className += hidden;
-	} else {
-		element.className = element.className.replace(hidden, '');
-	}
-	toggle(tag, element.nextElementSibling, hide);
-}
-
-// open all details
-document.querySelectorAll('details:not(.example)').forEach(e => e.open = true);
-
 // hide/show table of contents
-headers.forEach(
-	tag => document.querySelectorAll(tag + ':not(.title)').forEach(
-		element => element.onclick = () => toc.classList.toggle('show')
-	)
-);
+$('html').click(() => $('#TOC').toggleClass('show'));
+$('body').click(e => e.stopPropagation());
+
+function cmp(ha, hb){
+    // compare header tags, h1 > h2
+    if(ha == hb) return 0;
+    // h1 > h2 => 1    h2 < h1 => -1
+    return (+ha[1] < +hb[1]) * 2 - 1;
+}
+
+function toggle({ target }){
+    const hidden = ' hidden';
+    const { tagName, nextElementSibling } = target;
+    const hide = !target.classList.contains('collapsed');
+    target.classList.toggle('collapsed');
+    const stack = [nextElementSibling];
+    // not using classList.add/remove to support multiple 'hidden's for nested hidden headers
+    const tog = e => hide
+        ? e.className += hidden
+        : e.className = e.className.replace(hidden, '');
+    while(stack.length){
+        const element = stack.pop();
+        const tag = element.tagName;
+        if(/h\d/i.test(tag) && cmp(tagName, tag) <= 0) continue;
+
+        tog(element);
+        stack.push(element.nextElementSibling);
+    }
+}
+
+// hide contents under a header
+$('h1:not(.title),h2,h3').click(toggle);
 
 // no colgroup
-let deleted = false
-const del = col => { col.remove(); deleted = true };
-document.querySelectorAll('colgroup').forEach(del);
-if (!col) {
-	console.log('No colgroup were found!');
-}
+$('colgroup').remove();
 
-// click on header will hide all following elements until next header of same level
-// headers.forEach(
-// 	tag => document.querySelectorAll(tag + ':not(.title)').forEach(
-// 		element => element.onclick = ({target: { nextElementSibling } }) => {
-// 			toggle(tag, nextElementSibling, !nextElementSibling.className.includes('hidden'))
-// 		}
-// 	)
-// );
-// click on title to toggle all h1
-document.querySelector('h1.title').onclick = () => document.querySelectorAll('h1:not(.title)').forEach(h1 => h1.click());
+// add pitch accent
+$('span[class^=a]').each((_, e) => {
+    const acc = +e.className.substr(1);
+    const text = e.innerText;
+    if (acc !== 1) {
+        $('<span>').text(text[0]).addClass('low right').insertBefore(e);
+    }
+
+    // $('<span>').text(text.substring(acc !== 1, acc || undefined)).addClass([
+    //     'high', acc && 'right'
+    // ]).insertBefore(e);
+
+    $('<span>').text(
+        text.substring(acc !== 1, acc ? acc - 1 : undefined)
+    ).addClass('high').insertBefore(e);
+    
+    if(acc){
+        $('<span>').text(text[acc - 1]).addClass('high p right').insertBefore(e);
+    }
+
+    if (acc && acc != text.length) {
+        $('<span>').addClass('low').text(text.substring(acc)).insertBefore(e);
+    }
+    e.remove();
+});
 

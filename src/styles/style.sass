@@ -1,0 +1,33 @@
+@import "colors"
+@import "html"
+@import "details"
+@import "toc"
+
+// for script.js
+.hidden
+    display: none
+h1,h2,h3
+    &.collapsed
+        color: $lighter
+        // display: list-item
+        // list-style: disclosure-closed inside
+
+
+// 2d tables
+.\32 d > table tr
+    td:first-child, th:first-child
+        border-right: 1px solid $color
+        font-weight: bold
+
+@function border()
+    @return 1px solid $lighter
+
+// accent
+.right
+    border-right: border()
+.high
+    border-top: border()
+    border-radius: 3px
+.low
+    border-bottom: border()
+    border-radius: 3px
