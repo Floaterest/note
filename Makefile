@@ -20,13 +20,13 @@ $(fonts): $(build)/%.woff2: $(src)/fonts/%.woff2
 
 # build each html
 $(html): $(build)/%.html: $(notes)/%.md
-	$(pandoc) -H $(preamble) -o $@ $?
-# 	pandoc -c style.css
+# 	$(pandoc) -H $(preamble) -o $@ $?
+	$(pandoc) -H $(preamble) -c style.css -o $@ $?
 
 # copy script
 $(build)/script.js: $(src)/script.js
 	cp $? $@
 
 # build style
-$(build)/style.css: $(src)/styles/style.sass
-	npm run sass -- $? $@
+$(build)/style.css: $(src)/styles/*.sass
+	npm run sass -- $(src)/styles/style.sass $@
