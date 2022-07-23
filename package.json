@@ -4,6 +4,7 @@
         "sass": "sass --no-source-map"
     },
     "devDependencies": {
+        "live-server": "^1.2.2",
         "sass": "^1.50.0"
     }
 }
