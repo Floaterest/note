@@ -1,7 +1,48 @@
-@import "mixins"
 @import "colors"
 
+
+@mixin darken-background($accent)
+    background: rgba($accent, 0.10)
+
+@mixin pad
+    padding: $pad * 0.5 $pad
+
+@mixin quote($accent)
+    +pad()
+    +darken-background($accent)
+    margin: 0
+    border-left: $border-left solid $accent
+
+@mixin framed($selector, $accent)
+    &.#{$selector}
+        +quote($accent)
+        strong, .textbf
+            color: $accent
+        & > summary
+            +darken-background($accent)
+
+@mixin prefixed($selector, $accent)
+    +framed($selector, $accent)
+    &.#{$selector} > summary::before
+        content: "#{$selector}."
+        text-transform: capitalize
+        font-weight: bold
+        color: $accent
+
+// not for nested details
+:not(details) > details > summary
+    +pad()
+    cursor: pointer
+    display: block
+    margin-bottom: calc($pad / 2)
+    margin-left: -$pad
+    margin-right: -$pad
+
+blockquote
+    +quote($yellow)
+
 details
+    padding-top: 0 !important
     +prefixed(theorem, $leek)
     +prefixed(example, $orange)
     +prefixed(definition, $sky)
