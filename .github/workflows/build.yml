@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install TexLive
-        run: sh texlive.sh
+        run: sh src/texlive.sh && pdflatex --version
 
       - name: Update PATH
         run: |
@@ -28,7 +28,7 @@ jobs:
         run: sudo apt-get install pdf2svg
 
       - name: Install Pandoc
-        run: sh pandoc.sh && pandoc --version
+        run: sh src/pandoc.sh && pandoc --version
 
       - name: Build HTML
         run: npm i && make
