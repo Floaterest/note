@@ -14,7 +14,7 @@ local tikz_doc_template = [[
 ]]
 
 local function tikz2image(src, out)
-    system.with_temporary_directory('tikz2image', function (tmpdir)
+    system.with_temporary_directory('tikz', function (tmpdir)
         system.with_working_directory(tmpdir, function()
             local f = assert(io.open('tikz.tex', 'w'))
             f:write(tikz_doc_template:format(src))
