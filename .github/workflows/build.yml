@@ -1,10 +1,9 @@
 name: Build
 
-on:
-  push:
-    branches:
+on: 
+  push: 
+    branches: 
       - note
-    # branches-ignore: [ 'master' ]
 
 env:
   message: (≧ω≦) Update
@@ -17,11 +16,30 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install TexLive
+        run: sh texlive.sh
+
+      - name: Update PATH
+        run: |
+          echo "$(pwd)/texlive/bin/x86_64-linux:$PATH" >> $GITHUB_PATH
+          export PATH=$GITHUB_PATH
+
+      - name: Tree
+        run: echo $PATH && tree -L 4
+
+      - name: build
+        run: pdflatex tikz.tex
+
+      - name: Install PDF2SVG
+        run: sudo apt-get install pdf2svg
+
       - name: Install Pandoc
-        run: python3 pandoc.py && pandoc --version
+        run: sh pandoc.sh && pandoc --version
 
       - name: Build HTML
-        run: npm i && make
+        run: |
+          pdflatex --version
+          npm i && make
 
       - name: Deploy to Github Pages
         run : |
