@@ -24,12 +24,6 @@ jobs:
           echo "$(pwd)/texlive/bin/x86_64-linux:$PATH" >> $GITHUB_PATH
           export PATH=$GITHUB_PATH
 
-      - name: Tree
-        run: echo $PATH && tree -L 4
-
-      - name: build
-        run: pdflatex tikz.tex
-
       - name: Install PDF2SVG
         run: sudo apt-get install pdf2svg
 
@@ -37,20 +31,17 @@ jobs:
         run: sh pandoc.sh && pandoc --version
 
       - name: Build HTML
-        run: |
-          pdflatex --version
-          npm i && make
+        run: npm i && make
 
       - name: Deploy to Github Pages
         run : |
           cd build
-          tree -I node_modules
           git init
           git config --global user.email "support+actions@github.com"
           git config --global user.name "GitHub Actions"
           git config --global init.defaultBranch master
           git remote set-url origin ${{ env.remote }} || git remote add origin ${{ env.remote }}
-          git checkout -b build
+          git checkout -b pages
           git add .
           git commit -m "${{ env.message }}"
-          git push -u origin build -f
+          git push -u origin pages -f
