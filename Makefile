@@ -4,7 +4,7 @@ notes := notes
 
 preamble = $(src)/preamble.html
 highlight = $(src)/highlight.theme
-filter = tikz.lua
+filter = $(src)/tikz.lua
 
 markdown := $(wildcard $(notes)/*.md)
 html := $(addprefix $(build)/,$(notdir $(markdown:.md=.html)))
