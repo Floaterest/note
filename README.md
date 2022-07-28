@@ -1,3 +1,3 @@
 # Notes
 
-This is where I keep my portable notes
+Public notes so I browse them anywhere.
