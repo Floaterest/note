@@ -20,6 +20,12 @@
             color: $accent
         & > summary
             +darken-background($accent)
+            +pad()
+            cursor: pointer
+            display: block
+            margin-bottom: calc($pad / 2)
+            margin-left: -$pad
+            margin-right: -$pad
 
 @mixin prefixed($selector, $accent)
     +framed($selector, $accent)
@@ -28,15 +34,6 @@
         text-transform: capitalize
         font-weight: bold
         color: $accent
-
-// not for nested details
-:not(details) > details > summary
-    +pad()
-    cursor: pointer
-    display: block
-    margin-bottom: calc($pad / 2)
-    margin-left: -$pad
-    margin-right: -$pad
 
 blockquote
     +quote($yellow)
