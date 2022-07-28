@@ -4,9 +4,9 @@ local tikz_doc_template = [[
 \documentclass{standalone}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{automata,positioning,arrows.meta}
-\tikzset{initial text=,on grid,auto,thick}
-\tikzset{->/.style={arrows={-{Straight Barb[length=4pt]}}}}
+\usetikzlibrary{arrows.meta,positioning}
+\usetikzlibrary{arrows.meta}
+\tikzset{->/.style={arrows={-Stealth[inset=0pt,fill=none]}}}
 \begin{document}
 \nopagecolor
 %s
