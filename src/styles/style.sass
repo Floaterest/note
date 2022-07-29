@@ -18,6 +18,13 @@ h1,h2,h3
     td:first-child, th:first-child
         border-right: 1px solid $color
         font-weight: bold
+// vertical borders
+.vertical > table
+    tbody > tr
+        border: none
+    tr > th:not(:first-child), td:not(:first-child)
+        border-left: 1px solid $light
+
 
 @function border()
     @return 1px solid $lighter
