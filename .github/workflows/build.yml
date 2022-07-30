@@ -1,10 +1,9 @@
 name: Build
 
-on:
-  push:
-    branches:
+on: 
+  push: 
+    branches: 
       - note
-    # branches-ignore: [ 'master' ]
 
 env:
   message: (≧ω≦) Update
@@ -17,8 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install TexLive
+        run: sh src/texlive.sh
+
+      - name: Update PATH
+        run: |
+          echo "$(pwd)/texlive/bin/x86_64-linux:$PATH" >> $GITHUB_PATH
+          export PATH=$GITHUB_PATH
+
+      - name: Install PDF2SVG
+        run: sudo apt-get install pdf2svg
+
       - name: Install Pandoc
-        run: python3 pandoc.py && pandoc --version
+        run: sh src/pandoc.sh && pandoc --version
 
       - name: Build HTML
         run: npm i && make
@@ -26,13 +36,12 @@ jobs:
       - name: Deploy to Github Pages
         run : |
           cd build
-          tree -I node_modules
           git init
           git config --global user.email "support+actions@github.com"
           git config --global user.name "GitHub Actions"
           git config --global init.defaultBranch master
           git remote set-url origin ${{ env.remote }} || git remote add origin ${{ env.remote }}
-          git checkout -b build
+          git checkout -b pages
           git add .
           git commit -m "${{ env.message }}"
-          git push -u origin build -f
+          git push -u origin pages -f
