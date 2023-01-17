@@ -4,11 +4,8 @@
 @mixin darken-background($accent)
     background: rgba($accent, 0.10)
 
-@mixin pad
-    padding: $pad * 0.5 $pad
-
 @mixin quote($accent)
-    +pad()
+    padding: 0 $pad
     +darken-background($accent)
     margin: 0
     border-left: $border-left solid $accent
@@ -16,14 +13,14 @@
 @mixin framed($selector, $accent)
     &.#{$selector}
         +quote($accent)
+        padding-top: 0
         strong, .textbf
             color: $accent
         & > summary
             +darken-background($accent)
-            +pad()
+            padding: $pad * 0.5 $pad
             cursor: pointer
             display: block
-            margin-bottom: calc($pad / 2)
             margin-left: -$pad
             margin-right: -$pad
 
@@ -39,7 +36,6 @@ blockquote
     +quote($yellow)
 
 details
-    padding-top: 0 !important
     +prefixed(theorem, $leek)
     +prefixed(example, $orange)
     +prefixed(definition, $sky)
