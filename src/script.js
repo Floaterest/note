@@ -30,7 +30,7 @@ function toggle({ target }){
 }
 
 // hide contents under a header
-$('h1:not(.title),h2,h3').click(toggle);
+$('body > h1,h2,h3').click(toggle);
 
 // no colgroup
 $('colgroup').remove();

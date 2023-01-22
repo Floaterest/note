@@ -46,7 +46,7 @@ end
 
 function Math(element)
     local text = element.text
-    if text:match('^\\usetikzlibrary') or text:match('^\\begin{tikzpicture}') then
+    if text:match('^%s*\\usetikzlibrary') or text:match('^%s*\\begin{tikzpicture}') then
         local fbasename = pandoc.sha1(text) .. '.svg'
         local fname = system.get_working_directory() .. '/build/' .. fbasename
         if not file_exists(fname) then
