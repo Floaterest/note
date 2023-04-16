@@ -25,13 +25,15 @@
 </div>
 
 <style lang="sass">
-    @import '../styles/html'
+    @use '../styles/html'
+    @use '../styles/colors'
+
     input[type=number]
         background: unset
-        border: 1px solid $color
-        font: $mono
+        border: 1px solid colors.$color
+        font: html.$mono
         font-size: unset
-        color: $color
+        color: colors.$color
         -moz-appearance: textfield
         &::-webkit-outer-spin-button, &::-webkit-inner-spin-button 
             -webkit-appearance: none
