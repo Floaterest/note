@@ -1,6 +1,8 @@
 # build output
 dist/
 
+*.tex
+
 # dependencies
 node_modules/
 
