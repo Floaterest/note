@@ -4,6 +4,7 @@ title: MDX
 ---
 
 import Cube from '../components/Cube.svelte';
+import { Code } from 'astro/components';
 
 # MDX
 
@@ -16,6 +17,8 @@ line\
 break
 
 ## Code Block
+
+<Code code={`const theme = 'github-dark';`} lang="js"/>
 
 <details>
 <summary>[Dijkstra's Algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)</summary>
