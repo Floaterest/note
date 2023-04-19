@@ -1,0 +1,31 @@
+---
+import { readdir, stat } from 'fs';
+import { promisify } from 'util';
+import config from '../../astro.config';
+
+import Main from "../layouts/Main.astro";
+
+const content = {
+    title: config.base
+}
+
+// nightmare in functional programming
+const walk: (dirname:string)=>Promise<string[]> = async dirname => (
+    await Promise.all((await promisify(readdir)(dirname)).map(
+        entry => `${dirname}/${entry}`
+    ).map(async path => (await promisify(stat)(path)).isDirectory()
+        ? await walk(path)
+        : [ path ]
+    ))
+).flat()
+
+const root = 'src/pages'
+const paths = (await walk(root)).map(
+    path => path.split('.').slice(0, -1).join()
+    .replace(root, '').replace('index','')
+).sort()
+---
+
+<Main content={content}>
+{paths.map(path => <p><a href={`.${path}`}>{path}</a></p>)}
+</Main>
