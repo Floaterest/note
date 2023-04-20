@@ -34,8 +34,9 @@ jobs:
       - name: Upload again # to upload the svg images
         uses: actions/upload-pages-artifact@v1
         with: { path: dist }
-      # - name: List files
-      #   run: tree -I node_modules
+
+      - name: List files
+        run: tree dist
 
   deploy:
     needs: build
