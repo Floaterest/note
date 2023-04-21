@@ -10,12 +10,19 @@ const katex = {
     strict: false,
 }
 
+// workaround until Phase 2 (https://github.com/withastro/astro/issues/1212)
+// same for src/components/Code.astro
+const theme = '../../../../../../theme'
+
 // https://astro.build/config
 export default defineConfig({
     base: 'note',
     build:{ format: 'file' },
     integrations: [svelte(), mdx({
-        remarkPlugins: { extends: [remarkMath] },
-        rehypePlugins: { extends: [() => rehypeKatex(katex)] }
-    })]
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [() => rehypeKatex(katex)]
+    })],
+    markdown: {
+        shikiConfig:{ theme }
+    }
 });

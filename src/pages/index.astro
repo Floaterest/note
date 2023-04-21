@@ -1,12 +1,11 @@
 ---
 import { readdir, stat } from 'fs';
 import { promisify } from 'util';
-import config from '../../astro.config';
 
 import Main from "../layouts/Main.astro";
 
 const content = {
-    title: config.base
+    title: 'note'
 }
 
 // nightmare in functional programming
