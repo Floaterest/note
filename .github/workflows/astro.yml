@@ -17,26 +17,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v2          
-      - name: Install, Build, Upload
-        uses: withastro/action@v0
-      - name: Build Latex
-        uses: xu-cheng/latex-action@v2
+      - uses: actions/checkout@v2
+      - uses: withastro/action@v0
+
+      - uses: xu-cheng/latex-action@v2
         with:
           root_file: '*.tex'
           glob_root_file: true
           post_compile: latexmk -c
+
       - name: Convert PDF to SVG
         run: |
           sudo apt-get install pdf2svg
           make pdf2svg
-      - name: Upload again # to upload the svg images
-        uses: actions/upload-pages-artifact@v1
-        with: { path: dist }
 
       - name: List files
         run: tree dist
+
+      - name: Upload with SVG images
+        uses: actions/upload-pages-artifact@v1
+        with: { path: dist }
 
   deploy:
     needs: build
@@ -45,6 +45,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v1
