@@ -1,10 +1,10 @@
 # build output
-dist/
+/dist/
 
 *.tex
 
 # dependencies
-node_modules/
+/node_modules/
 
 # logs
 npm-debug.log*
