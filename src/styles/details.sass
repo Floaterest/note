@@ -27,7 +27,7 @@
 @mixin prefixed($selector, $accent)
     +framed($selector, $accent)
     &.#{$selector} > summary::before
-        content: '#{$selector}.'
+        content: '#{$selector}. '
         text-transform: capitalize
         font-weight: bold
         color: $accent
