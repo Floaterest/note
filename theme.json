@@ -17,14 +17,14 @@
             "settings": {
                 "name": "Comments and overrides inside comments",
                 "fontStyle": "italic",
-                "foreground": "#5e5e5e"
+                "foreground": "#7f7f7f"
             }
         },
         {
             "scope": "comment storage.type",
             "settings": {
                 "name": "JSDoc storage type",
-                "foreground": "#5e5e5e"
+                "foreground": "#7f7f7f"
             }
         },
         {
@@ -79,7 +79,7 @@
             ],
             "settings": {
                 "name": "Docstring",
-                "foreground": "#5e5e5e"
+                "foreground": "#7f7f7f"
             }
         },
         {
@@ -184,7 +184,7 @@
             "scope": "constant.numeric.line-number.find-in-files",
             "settings": {
                 "name": "Search result line numbers",
-                "foreground": "#5e5e5e"
+                "foreground": "#7f7f7f"
             }
         },
         {
@@ -775,7 +775,7 @@
             "scope": "punctuation.definition.comment",
             "settings": {
                 "name": "Comment start / end",
-                "foreground": "#5e5e5e"
+                "foreground": "#7f7f7f"
             }
         },
         {
