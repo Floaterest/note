@@ -1,4 +1,4 @@
-@use 'colors' as *
+@use '@floaterest/color' as *
 @use 'html' as *
 
 @mixin darken-background($accent)
@@ -18,8 +18,7 @@
             color: $accent
         & > summary
             +darken-background($accent)
-            padding: $pad * 0.5 $pad
-            cursor: pointer
+            padding: $pad * 0.5
             display: block
             margin-left: -$pad
             margin-right: -$pad
@@ -36,6 +35,8 @@ blockquote
     +quote($yellow)
 
 details
+    overflow-x: auto
+    overflow-y: hidden
     +prefixed(theorem, $teal)
     +prefixed(example, $orange)
     +prefixed(definition, $sky)
