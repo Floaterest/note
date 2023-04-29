@@ -1,0 +1,26 @@
+@use 'html'
+@use 'details'
+
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons+Round'
+@import 'https://fonts.googleapis.com/css2?family=Roboto'
+@import 'https://floaterest.github.io/fonts/iosevka.css'
+
+
+.tikz
+    filter: invert(1)
+    width: 100%
+    color: black // with invert(1), image is white, and text is also white
+
+.katex-display
+    margin: 0
+.katex-error
+    height: 2em
+    display: block
+    overflow: clip
+
+// make Code.astro inline
+pre.shiki, pre > code
+    display: inline
+
+pre.astro-code
+    overflow-x: unset !important
