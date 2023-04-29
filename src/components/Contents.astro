@@ -1,0 +1,11 @@
+---
+const { headings } = Astro.props;
+---
+
+<ul>
+{headings.children.map(({ href, text, children }) =>
+    <li><a {href}>{text}</a>
+        {children && <Astro.self headings={{ children }}/>}
+        </li>
+)}
+</ul>
