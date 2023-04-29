@@ -4,9 +4,7 @@ import { promisify } from 'util';
 
 import Main from "../layouts/Main.astro";
 
-const content = {
-    title: 'note'
-}
+const content = { title: 'note' }
 
 // nightmare in functional programming
 const walk: (dirname:string)=>Promise<string[]> = async dirname => (
