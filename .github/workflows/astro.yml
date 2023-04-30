@@ -1,6 +1,6 @@
 name: Build
 
-on: 
+on:
   push: { branch: [note] }
   workflow_dispatch:
 
@@ -13,30 +13,99 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  path: latex
+  dist: dist
+  live: texlive
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache TEX files
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.path }}
+          key: LaTeX-${{ hashFiles('**/*.tex') }}
+          restore-keys: LaTeX
+
       - uses: withastro/action@v0
 
-      - uses: xu-cheng/latex-action@v2
+      - name: Copy TEX files to cache
+        run: rsync *.tex ${{ env.path }}
+
+      - name: List ${{ env.path }}
+        run: tree ${{ env.path }}
+
+      - name: List latex files
+        run: |
+          echo "SRC<<EOF" >> $GITHUB_ENV
+          ls ${{ env.path }}/*.tex | sort | sed -e 's/\.tex$//' >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "SVG<<EOF" >> $GITHUB_ENV
+          ls ${{ env.path }}/*.svg | sort | sed -e 's/\.svg$//' >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: List missing files
+        run: |
+          echo "NOSVG<<EOF" >> $GITHUB_ENV
+          comm -23 <(echo "$SRC") <(echo "$SVG") | grep '\S' | sed -e 's/$/.tex/' >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "NOSRC<<EOF" >> $GITHUB_ENV
+          comm -13 <(echo "$SRC") <(echo "$SVG") | grep '\S' | sed -e 's/$/.svg/' >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Delete unused SVGs
+        if: ${{ env.NOSRC != '' }}
+        run: rm $NOSRC
+
+      - name: Cache TexLive
+        uses: actions/cache@v3
+        id: texlive
         with:
-          root_file: '*.tex'
-          glob_root_file: true
-          post_compile: latexmk -c
+          path: ${{ env.live }}
+          key: ${{ env.live }}
+
+      # https://tug.org/texlive/quickinstall.html
+      - name: Install TexLive
+        if: steps.texlive.outputs.cache-hit != 'true'
+        run: |
+          wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+          tar xvf install-tl-unx.tar.gz
+          perl $(ls -d install-tl-*/ | head -n1)/install-tl -texdir ./${{ env.live }} -portable -no-src-install --no-interaction
+
+      - name: Add texlive to PATH
+        run: |
+          echo "# $(du -hd0 ${{ env.live }}) Files" >> $GITHUB_STEP_SUMMARY
+          echo "$(pwd)/${{ env.live }}/bin/x86_64-linux:$PATH" >> $GITHUB_PATH
+
+      - name: Install TEX packages
+        if: steps.texlive.outputs.cache-hit != 'true'
+        run: tlmgr install standalone xcolor pgf
+
+      - name: Compile Missing SVGs
+        if: ${{ env.NOSVG != '' }}
+        run: echo "$NOSVG" | xargs -L1 -P0 -t pdflatex -file-line-error -halt-on-error -interaction=nonstopmode
 
       - name: Convert PDF to SVG
+        if: ${{ env.NOSVG != '' }}
         run: |
+          rm *.aux *.log
           sudo apt-get install pdf2svg
-          make pdf2svg
+          ls *.pdf | perl -pe 's/(\w+)\.pdf$/$1.pdf ${{ env.path }}\/$1.svg/' | xargs -L1 -P0 pdf2svg
+
+      - name: Copy ${{ env.path }} to ${{ env.dist }}
+        run: cp ${{ env.path }}/* ${{ env.dist }}
 
       - name: List files
-        run: tree dist
+        run: tree . -I 'node_modules|texlive|install-tl-*'
 
       - name: Upload with SVG images
         uses: actions/upload-pages-artifact@v1
-        with: { path: dist }
+        with:
+          path: ${{ env.dist }}
 
   deploy:
     needs: build
