@@ -1,20 +1,9 @@
 ---
-import type { Lang, ILanguageRegistration } from 'shiki';
-import { getHighlighter } from 'astro/components/Shiki';
-
-export interface Props {
-	code: string;
-	lang?: Lang | ILanguageRegistration;
-}
-
-const { code, lang = 'plaintext' } = Astro.props;
-const theme = '../../../../../../theme';
-const langs = typeof lang !== 'string' ? [lang] : undefined;
-
-const highlighter = await getHighlighter({theme, langs });
-// contains <pre>, which will not make it inline
-const html = highlighter.codeToHtml(code, { lang: typeof lang === 'string' ? lang : lang.id });
+import { getHighlighter } from './Shiki';
+import theme from '../../theme.json';
+const { code, lang } = Astro.props;
+const highlighter = await getHighlighter({ theme });
+const html = highlighter.codeToHtml(code, { lang });
 ---
 
-<Fragment set:html={html.replace(/<\/?pre[^>]+>/, '')} />
-
+<Fragment set:html={html} />
