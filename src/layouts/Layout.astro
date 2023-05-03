@@ -1,0 +1,39 @@
+---
+import "../styles/app.sass";
+import "@floaterest/iosevka/iosevka.css";
+import favicon from "/favicon.png";
+import Load from "../components/Load.svelte";
+
+const {
+    content: { title },
+} = Astro.props;
+
+const katex = {
+    rel: "stylesheet",
+    crossorigin: "anonymous",
+    href: "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css",
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" href={favicon} />
+        <link rel="stylesheet" href="/smui.css" />
+        <link {...katex} />
+        <title>{title}</title>
+    </head>
+    <body>
+        {
+            import.meta.env.PROD ? (
+                <Load client:load>
+                    <slot />
+                </Load>
+            ) : (
+                <slot />
+            )
+        }
+    </body>
+</html>

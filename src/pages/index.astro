@@ -1,28 +1,26 @@
 ---
-import { readdir, stat } from 'fs';
-import { promisify } from 'util';
-
 import Main from "../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import { collections } from "../content/config";
+import Menu from "../components/Menu.svelte";
 
-const content = { title: 'note' }
+const map = new Map<string, { href: string; title: string }[]>(
+    await Promise.all(
+        Object.keys(collections).map(async (content) => [
+            content,
+            (
+                await getCollection(content)
+            ).map(({ slug, data: { title } }) => ({
+                href: slug + "/",
+                title,
+            })),
+        ])
+    )
+);
 
-// nightmare in functional programming
-const walk: (dirname:string)=>Promise<string[]> = async dirname => (
-    await Promise.all((await promisify(readdir)(dirname)).map(
-        entry => `${dirname}/${entry}`
-    ).map(async path => (await promisify(stat)(path)).isDirectory()
-        ? await walk(path)
-        : [ path ]
-    ))
-).flat()
-
-const root = 'src/pages'
-const paths = (await walk(root)).map(
-    path => path.split('.').slice(0, -1).join()
-    .replace(root, '').replace('index','')
-).sort()
+const content = { title: "note" };
 ---
 
-<Main content={content}>
-{paths.map(path => <p><a href={`.${path}`}>{path}</a></p>)}
+<Main {content}>
+    <Menu {map} client:load />
 </Main>
