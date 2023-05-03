@@ -1,0 +1,26 @@
+---
+import { getCollection, getEntryBySlug } from "astro:content";
+import { collections } from "../../content/config";
+
+import Main from "../../layouts/Main.astro";
+
+export const getStaticPaths = async () =>
+    await Promise.all(
+        Object.keys(collections).flatMap(async (content) =>
+            (
+                await getCollection(content)
+            ).map(({ slug }) => ({ params: { content, slug } }))
+        )
+    );
+const { content, slug } = Astro.params;
+const {
+    data: { title },
+    render,
+} = (await getEntryBySlug(content, slug))!;
+const { Content, headings } = await render();
+---
+
+<Main content={{ title }}>
+    <h1><a href="/" class="material-icons-round">home</a> {title}</h1>
+    <Content />
+</Main>
