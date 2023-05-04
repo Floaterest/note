@@ -1,0 +1,21 @@
+@use '@floaterest/color' as *;
+@use 'sass:color';
+@use '@material/theme/color-palette';
+
+@use '@material/theme' as theme with ($primary: $teal,
+	$secondary: $darker,
+	$surface: $darkest,
+	$background: $black,
+	$error: $pink,
+);
+
+html {
+	background: theme.$background;
+	color: $white;
+}
+
+@media (orientation: portrait) {
+	.smui-accordion__header__title--with-description {
+		max-width: 100px !important;
+	}
+}
