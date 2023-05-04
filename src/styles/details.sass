@@ -14,10 +14,11 @@
     &.#{$selector}
         +quote($accent)
         padding-top: 0
-        strong, .accent
+        strong
             color: $accent
         & > summary
             +darken-background($accent)
+            white-space: nowrap
             padding: $pad * 0.5
             display: block
             margin-left: -$pad
