@@ -2,12 +2,12 @@ import { getHighlighter as getShikiHighlighter } from 'shiki';
 
 const cache = new Map();
 
-function stringify(opts) {
+function stringify(opts: any) {
 	// Always sort keys before stringifying to make sure objects match regardless of parameter ordering
 	return JSON.stringify(opts, Object.keys(opts).sort());
 }
 
-async function resolve(opts) {
+async function resolve(opts: any) {
 	return getShikiHighlighter(opts).then(hl => {
 		hl.setColorReplacements({
 			'#000001': 'var(--astro-code-color-text)',
@@ -26,7 +26,7 @@ async function resolve(opts) {
 	});
 }
 
-export function getHighlighter(opts) {
+export function getHighlighter(opts: any) {
 	const key = stringify(opts);
 	// Highlighter has already been requested, reuse the same instance
 	if (cache.has(key)) {
