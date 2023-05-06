@@ -2,7 +2,6 @@
 import "../styles/app.sass";
 import "@floaterest/iosevka/iosevka.css";
 import favicon from "/favicon.png";
-import Load from "../components/Load.svelte";
 
 const {
     content: { title },
@@ -26,14 +25,6 @@ const katex = {
         <title>{title}</title>
     </head>
     <body>
-        {
-            import.meta.env.PROD ? (
-                <Load client:load>
-                    <slot />
-                </Load>
-            ) : (
-                <slot />
-            )
-        }
+        <slot />
     </body>
 </html>
