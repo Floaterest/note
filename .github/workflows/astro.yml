@@ -14,105 +14,80 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  path: latex
-  dist: dist
-  live: texlive
+  tectonic: ~/.cache/Tectonic
+  install: curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh
+  project: '***'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # build project
       - uses: actions/checkout@v2
 
-      - name: Cache TEX files
+      - uses: pnpm/action-setup@v2.2.4
+        with: { version: latest }
+      - uses: actions/setup-node@v3
+        with: { node-version: latest, cache: pnpm }
+      - name: Build
+        run: pnpm install --frozen-lockfile && pnpm build
+
+      - name: Cache SVG files
+        id: svg
         uses: actions/cache@v3
         with:
-          path: ${{ env.path }}
-          key: LaTeX-${{ hashFiles('**/*.tex') }}
-          restore-keys: LaTeX
+          path: dist/*.svg
+          key: SVG-${{ hashFiles('dist/*.tex') }}
+          restore-keys: SVG
 
-      - uses: withastro/action@v0
+      - name: Install Tectonic
+        run: ${{ env.install }}
+        if: steps.svg.outputs.cache-hit != 'true'
+        working-directory: /usr/local/bin
 
-      - name: Copy TEX files to cache
-        run: rsync *.tex ${{ env.path }}
-
-      - name: List ${{ env.path }}
-        run: tree ${{ env.path }}
-
-      - name: List latex files
-        run: |
-          echo "SRC<<EOF" >> $GITHUB_ENV
-          ls ${{ env.path }}/*.tex | sort | sed -e 's/\.tex$//' >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "SVG<<EOF" >> $GITHUB_ENV
-          ls ${{ env.path }}/*.svg | sort | sed -e 's/\.svg$//' >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: List missing files
-        run: |
-          echo "NOSVG<<EOF" >> $GITHUB_ENV
-          comm -23 <(echo "$SRC") <(echo "$SVG") | grep '\S' | sed -e 's/$/.tex/' >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "NOSRC<<EOF" >> $GITHUB_ENV
-          comm -13 <(echo "$SRC") <(echo "$SVG") | grep '\S' | sed -e 's/$/.svg/' >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Delete unused SVGs
-        if: ${{ env.NOSRC != '' }}
-        run: rm $NOSRC
-
-      - name: Cache TexLive
+      - name: Cache Tectonic packages
+        if: steps.svg.outputs.cache-hit != 'true'
         uses: actions/cache@v3
-        id: texlive
+        id: tectonic
         with:
-          path: ${{ env.live }}
-          key: ${{ env.live }}
+          path: ~/.cache/Tectonic
+          key: Tectonic-${{ hashFiles('dist/*.tex') }}
+          restore-keys: Tectonic
 
-      # https://tug.org/texlive/quickinstall.html
-      - name: Install TexLive
-        if: steps.texlive.outputs.cache-hit != 'true'
-        run: |
-          wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
-          tar xvf install-tl-unx.tar.gz
-          perl $(ls -d install-tl-*/ | head -n1)/install-tl -texdir ./${{ env.live }} -portable -no-src-install --no-interaction
-
-      - name: Add texlive to PATH
-        run: |
-          echo "# $(du -hd0 ${{ env.live }}) Files" >> $GITHUB_STEP_SUMMARY
-          echo "$(pwd)/${{ env.live }}/bin/x86_64-linux:$PATH" >> $GITHUB_PATH
-
-      - name: Install TEX packages
-        if: steps.texlive.outputs.cache-hit != 'true'
-        run: tlmgr install standalone xcolor pgf
-
-      - name: Compile Missing SVGs
-        if: ${{ env.NOSVG != '' }}
-        run: echo "$NOSVG" | xargs -L1 -P0 -t pdflatex -file-line-error -halt-on-error -interaction=nonstopmode
+      - name: Build missing SVGs and remove excessive SVGs
+        if: steps.svg.outputs.cache-hit != 'true'
+        run: python3 sync.py dist/ | xargs -L1 tectonic
 
       - name: Convert PDF to SVG
-        if: ${{ env.NOSVG != '' }}
+        if: steps.svg.outputs.cache-hit != 'true'
         run: |
-          rm *.aux *.log
           sudo apt-get install pdf2svg
-          ls *.pdf | perl -pe 's/(\w+)\.pdf$/$1.pdf ${{ env.path }}\/$1.svg/' | xargs -L1 -P0 pdf2svg
+          ls *.pdf | perl -pe 's/((.+)\.pdf)/$1 $2.svg/' | xargs -L1 -P0 pdf2svg
+        working-directory: dist
 
-      - name: Copy ${{ env.path }} to ${{ env.dist }}
-        run: cp ${{ env.path }}/* ${{ env.dist }}
+      - name: Put cached SVG count to summary
+        run: echo "# Cached $(ls dist/*.svg | wc -l) SVG Files" >> $GITHUB_STEP_SUMMARY
 
-      - name: List files
-        run: tree . -I 'node_modules|texlive|install-tl-*'
+      - name: List dist
+        run: tree dist
 
-      - name: Upload with SVG images
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ${{ env.dist }}
+      - uses: actions/upload-artifact@v3
+        with: { name: dist, path: dist }
 
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v1
+      - uses: actions/download-artifact@v3
+        with: { name: dist }
+
+      - run: tree -L 3
+
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: ${{ env.project }}
+          entrypoint: entry.ts
