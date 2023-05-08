@@ -16,7 +16,6 @@ concurrency:
 env:
   tectonic: ~/.cache/Tectonic
   install: curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net |sh
-  project: '***'
 
 jobs:
   build:
@@ -86,14 +85,15 @@ jobs:
     #   - id: deployment
     #     uses: actions/deploy-pages@v1
 
-    # Deno Deploy
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v3
+        with: { name: dist }
 
-    # permissions:
-    #   id-token: write
-    #   contents: read
-    # steps:
-    #   - uses: actions/download-artifact@v3
-    #     with: { name: dist }
+      - run: tree -L 3
+
     #   - name: Upload to Deno Deploy
     #     uses: denoland/deployctl@v1
     #     with:
