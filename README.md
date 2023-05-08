@@ -9,4 +9,5 @@
 
 ## CD/CI
 
-In the end of [astro.yml](./.github/workflows/astro.yml), uncomment the job for deploy
+- for [actions/deploy-pages@v1](https://github.com/actions/deploy-pages), the actions/upload-artifact part is already done
+- for [denoland/deployctl@v1](https://deno.com/deploy/docs/deployctl#deployctl-github-action), there is [public/entry.ts](./public/entry.ts). So `entrypoint: entry.ts` will work.
