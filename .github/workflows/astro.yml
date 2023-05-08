@@ -54,7 +54,7 @@ jobs:
 
       - name: Build missing SVGs and remove excessive SVGs
         if: steps.svg.outputs.cache-hit != 'true'
-        run: python3 sync.py dist/ | xargs -L1 tectonic
+        run: python3 sync.py dist | xargs -r -L1 tectonic
 
       - name: Convert PDF to SVG
         if: steps.svg.outputs.cache-hit != 'true'
