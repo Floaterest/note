@@ -68,8 +68,7 @@ jobs:
 
       - name: List dist
         run: tree dist
-
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-pages-artifact@v1
         with: { name: github-pages, path: dist }
 
   deploy:
@@ -84,9 +83,6 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v1
 
-    # permissions:
-    #   id-token: write
-    #   contents: read
     # steps:
     #   - uses: actions/download-artifact@v3
     #     with: { name: github-pages }
