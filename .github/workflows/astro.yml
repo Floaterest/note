@@ -77,23 +77,20 @@ jobs:
     needs: build
 
     # Github Pages
-
-    # environment:
-    #   name: github-pages
-    #   url: ${{ steps.deployment.outputs.page_url }}
-    # steps:
-    #   - id: deployment
-    #     uses: actions/deploy-pages@v1
-
-    permissions:
-      id-token: write
-      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/download-artifact@v3
-        with: { name: dist }
+      - id: deployment
+        uses: actions/deploy-pages@v1
 
-      - run: tree -L 3
-
+    # permissions:
+    #   id-token: write
+    #   contents: read
+    # steps:
+    #   - uses: actions/download-artifact@v3
+    #     with: { name: dist }
+    #   - run: tree -L 3
     #   - name: Upload to Deno Deploy
     #     uses: denoland/deployctl@v1
     #     with:
