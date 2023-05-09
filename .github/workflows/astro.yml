@@ -70,7 +70,7 @@ jobs:
         run: tree dist
 
       - uses: actions/upload-artifact@v3
-        with: { name: dist, path: dist }
+        with: { name: github-pages, path: dist }
 
   deploy:
     runs-on: ubuntu-latest
@@ -89,7 +89,7 @@ jobs:
     #   contents: read
     # steps:
     #   - uses: actions/download-artifact@v3
-    #     with: { name: dist }
+    #     with: { name: github-pages }
     #   - run: tree -L 3
     #   - name: Upload to Deno Deploy
     #     uses: denoland/deployctl@v1
