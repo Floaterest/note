@@ -1,0 +1,33 @@
+import Tikz from '../../components/Tikz.astro'
+
+# Turing Machine
+
+<Tikz preamble={'\\usetikzlibrary{automata}\\tikzset{initial text=}'}  latex={String.raw`$$
+\begin{tikzpicture}[scale=1.5]
+    \node[state,initial]at(-2,0)(s){$s$};
+    \node[state]at(-1,-1.73)(a){$acc$};
+    \node[state]at(0,0)(2){$q_1$};
+    \node[state]at(2,0)(3){$q_2$};
+    \node[state]at(1,-1.73)(5){$q_4$};
+    \node[state]at(-1,1.73)(r){$rej$};
+    \node[state]at(1,1.73)(4){$q_3$};
+    \path[->]
+        (5) edge[loop right] node[right]{\begin{tabular}{c}
+                 $0\to 0,L$\\$x\to x,L$
+            \end{tabular}}()
+            edge node[above,rotate=-60]{$\sqcup\to\sqcup,R$}(2)
+        (4) edge[loop right] node[right]{$x\to x,R$}()
+            edge node[above]{$\sqcup\to \sqcup,R$}(r)
+        (4.-70)edge node[below,,rotate=-60]{$0\to x,R$}(3.130)
+        (3) edge[loop right] node[right]{$x,x\to R$}()
+            edge node[above,rotate=60]{$\sqcup\to \sqcup,L$}(5)
+        (3.110)edge node[above,rotate=-60]{$0\to 0,R$}(4.-50)
+        (2) edge[loop above] node[above]{$x\to x,R$}()
+            edge node[above]{$0\to x,R$}(3)
+            edge node[above,rotate=60]{$\sqcup\to\sqcup,R$}(a)
+        (s) edge node[above]{$0\to\sqcup,R$}(2)
+            edge node[above,rotate=60]{\begin{tabular}{c}
+                 $x\to x,R$\\$\sqcup\to\sqcup,R$
+            \end{tabular}}(r);
+\end{tikzpicture}
+$$`}/>
