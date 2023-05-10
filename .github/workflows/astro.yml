@@ -60,7 +60,7 @@ jobs:
         if: steps.svg.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install pdf2svg
-          ls *.tex | perl -pe 's/(.+)\.tex/$1.pdf $1.svg/' xargs -L1 -P0 pdf2svg
+          ls *.tex | perl -pe 's/(.+)\.tex/$1.pdf $1.svg/' | xargs -L1 -P0 pdf2svg
         working-directory: dist
 
       - name: Put cached SVG count to summary
