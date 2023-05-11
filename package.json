@@ -1,10 +1,30 @@
 {
+    "name": "@floaterest/note",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
     "scripts": {
-        "dev": "live-server build --no-browser",
-        "sass": "sass --no-source-map"
+        "dev": "astro dev --port 5173",
+        "start": "astro dev",
+        "build": "astro build",
+        "prepare": "smui-theme compile public/smui.css -i src/theme -i ./node_modules",
+        "preview": "astro preview",
+        "astro": "astro"
     },
     "devDependencies": {
-        "live-server": "^1.2.2",
-        "sass": "^1.52.3"
+        "@astrojs/mdx": "^0.16.2",
+        "@astrojs/svelte": "^2.0.2",
+        "@floaterest/color": "1.0.0",
+        "@floaterest/iosevka": "^1.0.0",
+        "@smui-extra/accordion": "7.0.0-beta.0",
+        "@smui/drawer": "7.0.0-beta.0",
+        "@smui/icon-button": "7.0.0-beta.0",
+        "@smui/top-app-bar": "7.0.0-beta.0",
+        "astro": "^2.0.12",
+        "rehype-katex": "^6.0.2",
+        "remark-math": "^5.1.1",
+        "sass": "^1.58.1",
+        "smui-theme": "7.0.0-beta.0",
+        "svelte": "^3.55.1"
     }
 }

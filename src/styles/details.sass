@@ -1,5 +1,5 @@
-@import "colors"
-
+@use '@floaterest/color' as *
+@use 'html' as *
 
 @mixin darken-background($accent)
     background: rgba($accent, 0.10)
@@ -14,12 +14,12 @@
     &.#{$selector}
         +quote($accent)
         padding-top: 0
-        strong, .textbf
+        strong
             color: $accent
         & > summary
             +darken-background($accent)
-            padding: $pad * 0.5 $pad
-            cursor: pointer
+            white-space: nowrap
+            padding: $pad * 0.5
             display: block
             margin-left: -$pad
             margin-right: -$pad
@@ -27,7 +27,7 @@
 @mixin prefixed($selector, $accent)
     +framed($selector, $accent)
     &.#{$selector} > summary::before
-        content: "#{$selector}."
+        content: '#{$selector}. '
         text-transform: capitalize
         font-weight: bold
         color: $accent
@@ -36,13 +36,18 @@ blockquote
     +quote($yellow)
 
 details
-    +prefixed(theorem, $leek)
+    overflow-x: auto
+    overflow-y: hidden
+    +prefixed(theorem, $teal)
     +prefixed(example, $orange)
     +prefixed(definition, $sky)
     +prefixed(algorithm, $pink)
 
-    +framed('leek', $leek)
+    +framed('teal', $teal)
     +framed('orange', $orange)
     +framed('sky', $sky)
     +framed('pink', $pink)
     +framed('yellow', $yellow)
+
+summary
+    cursor: pointer
