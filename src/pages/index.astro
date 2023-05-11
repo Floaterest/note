@@ -1,0 +1,26 @@
+---
+import Main from "../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import { collections } from "../content/config";
+import Menu from "../components/Menu.svelte";
+
+const map = new Map<string, { href: string; title: string }[]>(
+    await Promise.all(
+        Object.keys(collections).map(async (content) => [
+            content,
+            (
+                await getCollection(content)
+            ).map(({ slug, data: { title } }) => ({
+                href: slug + "/",
+                title,
+            })),
+        ])
+    )
+);
+
+const content = { title: "note" };
+---
+
+<Main {content}>
+    <Menu {map} client:load />
+</Main>

@@ -1,0 +1,9 @@
+---
+import { getHighlighter } from './Shiki';
+import theme from '../../theme.json';
+const { code, lang } = Astro.props;
+const highlighter = await getHighlighter({ theme });
+const html = highlighter.codeToHtml(code, { lang });
+---
+
+<Fragment set:html={html} />
