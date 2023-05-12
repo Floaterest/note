@@ -19,6 +19,7 @@ export default defineConfig({
     // adapter: deno(),
     trailingSlash: 'always',
     build: { format: 'directory' },
+    base: 'note',
     markdown: {
         shikiConfig: { theme },
         remarkPlugins: [remarkMath],

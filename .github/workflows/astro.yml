@@ -60,7 +60,7 @@ jobs:
         if: steps.svg.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install pdf2svg
-          ls *.pdf | perl -pe 's/((.+)\.pdf)/$1 $2.svg/' | xargs -L1 -P0 pdf2svg
+          ls *.tex | perl -pe 's/(.+)\.tex/$1.pdf $1.svg/' | xargs -L1 -P0 pdf2svg
         working-directory: dist
 
       - name: Put cached SVG count to summary
@@ -68,32 +68,25 @@ jobs:
 
       - name: List dist
         run: tree dist
-
-      - uses: actions/upload-artifact@v3
-        with: { name: dist, path: dist }
+      - uses: actions/upload-pages-artifact@v1
+        with: { name: github-pages, path: dist }
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     # Github Pages
-
-    # environment:
-    #   name: github-pages
-    #   url: ${{ steps.deployment.outputs.page_url }}
-    # steps:
-    #   - id: deployment
-    #     uses: actions/deploy-pages@v1
-
-    permissions:
-      id-token: write
-      contents: read
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/download-artifact@v3
-        with: { name: dist }
+      - id: deployment
+        uses: actions/deploy-pages@v1
 
-      - run: tree -L 3
-
+    # steps:
+    #   - uses: actions/download-artifact@v3
+    #     with: { name: github-pages }
+    #   - run: tree -L 3
     #   - name: Upload to Deno Deploy
     #     uses: denoland/deployctl@v1
     #     with:
