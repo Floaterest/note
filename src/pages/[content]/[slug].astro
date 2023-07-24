@@ -1,8 +1,7 @@
 ---
-import { getCollection, getEntryBySlug } from "astro:content";
-import { collections } from "../../content/config";
-
 import Main from "../../layouts/Main.astro";
+import { getCollection } from "astro:content";
+import { collections } from "../../content/config";
 
 export const getStaticPaths = async () =>
     await Promise.all(
