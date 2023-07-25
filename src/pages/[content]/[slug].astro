@@ -5,21 +5,24 @@ import { collections } from "../../content/config";
 
 export const getStaticPaths = async () =>
     await Promise.all(
-        Object.keys(collections).flatMap(async (content) =>
-            (
-                await getCollection(content)
-            ).map(({ slug }) => ({ params: { content, slug } }))
-        )
+        Object.keys(collections).flatMap(async (content: any) =>
+            (await getCollection(content)).map((entry: any) => ({
+                params: { content, slug: entry.slug },
+                props: { entry },
+            })),
+        ),
     );
-const { content, slug } = Astro.params;
+
 const {
-    data: { title },
-    render,
-} = (await getEntryBySlug(content, slug))!;
-const { Content, headings } = await render();
+    entry: {
+        render,
+        data: { title },
+    },
+} = Astro.props;
+const { Content, headings: _ } = await render();
 ---
 
 <Main content={{ title }}>
-    <h1><a href="/" class="material-icons-round">home</a> {title}</h1>
+    <h1><a href="../">{title}</a></h1>
     <Content />
 </Main>
