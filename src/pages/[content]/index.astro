@@ -12,7 +12,7 @@ const { content: title } = Astro.params;
 const entries = await getCollection(title);
 ---
 
-<Main content={{ title }}>
+<Main {title}>
     {
         entries.map(({ slug, data: { title }}) => <h1><a href={`./${slug}/`}>{title}</a></h1>)
     }
