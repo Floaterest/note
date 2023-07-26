@@ -3,7 +3,7 @@ import Main from "../layouts/Main.astro";
 import { getCollection } from "astro:content";
 import { collections } from "../content/config";
 
-const map = new Map<string, { href: string; title: string }[]>(
+const contents = new Map<string, { href: string; title: string }[]>(
     await Promise.all(
         Object.keys(collections).map(async (content) => [
             content,
@@ -17,13 +17,12 @@ const map = new Map<string, { href: string; title: string }[]>(
     )
 );
 
-const content = { title: "note" };
 ---
 
-<Main {content}>
+<Main title="note">
     <ul>
         {
-			Array.from(map.entries()).map(([name, content]) => (
+			Array.from(contents.entries()).map(([name, content]) => (
 				<li>
 					<a href={`./${name}/`}>{name}</a>
 					<ul>
