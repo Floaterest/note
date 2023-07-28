@@ -15,10 +15,24 @@ for (const content in collections) {
 		})),
 	);
 }
+
+const other = (await Astro.glob("/src/pages/*.{mdx,md}")).map(
+	({ url, frontmatter: { title } }) => ({
+		href: "." + url,
+		title,
+	})
+);
 ---
 
 <Main title="note">
 	<ul>
+		{
+            other.map(({ href, title }) => (
+                <li>
+                    <a {href}>{title}</a>
+                </li>
+            ))
+        }
 		{
 			Array.from(contents.entries()).map(([name, content]) => (
 				<li>
