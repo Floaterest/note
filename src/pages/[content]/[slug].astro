@@ -6,7 +6,7 @@ import { collections } from "../../content/config";
 
 export const getStaticPaths = (async () => {
     let arr = [];
-    for (const content of Object.keys(collections)) {
+    for (const content in collections) {
         const c = await getCollection(content as any);
         arr.push(
             ...c.map((entry: any) => ({
