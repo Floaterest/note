@@ -5,16 +5,11 @@ html
     @apply dark:text-white dark:bg-black
     @apply print:text-white print:bg-black
     font-family: Roboto, 'UD Digi Kyokasho NK-R', sans-serif
-
-body
-    padding-bottom: 30em
-    margin: 0 auto
-    cursor: initial
+body, main
+    @apply mx-auto my-4
 
 main
     width: 40em
-    margin: 0 auto
-
     a
         color: $yellow
         &:visited
