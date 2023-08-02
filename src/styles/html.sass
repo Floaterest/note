@@ -11,6 +11,9 @@ body, main
 main
     @apply print:mx-4 max-w-[40em] print:max-w-none mb-[30em]
 
+h1, h2, h3
+    @apply leading-tight dark:text-yellow print:text-yellow
+
 a
     @apply text-blue no-underline hover:underline
     @apply dark:text-yellow dark:hover:bg-darker dark:hover:text-white
@@ -28,11 +31,6 @@ p, header, dl, ul, ol, pre
 rt
     @apply select-none
 
-
-h1, h2, h3
-    color: $yellow
-    margin: 0.5em 0
-    white-space: nowrap
 
 blockquote
     color: rgba($white, 0.75) !important
