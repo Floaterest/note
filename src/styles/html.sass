@@ -30,11 +30,6 @@ rt
     @apply select-none
 
 table
-    border-collapse: collapse
-    white-space: nowrap
-    tbody > tr:not(:first-child)
-        border-top: 1px solid $light
-    thead > tr
-        border-bottom: 1px solid $white !important
-    td, th
-        padding: 0.5em
+    @apply border-collapse whitespace-nowrap
+tbody
+    @apply divide-solid divide-dark divide-x-0 divide-y
