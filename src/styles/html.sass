@@ -35,3 +35,6 @@ tbody
     @apply divide-solid divide-dark divide-x-0 divide-y
 th:empty
     @apply hidden
+thead > tr:last-child th:not(:empty)
+    // only bottom border
+    @apply border-0 border-b border-solid
