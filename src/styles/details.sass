@@ -18,9 +18,7 @@
     +framed($selector, $accent)
     &.#{$selector} > summary::before
         content: '#{$selector}. '
-        text-transform: capitalize
-        font-weight: bold
-        color: $accent
+        @apply text-#{$accent} capitalize font-bold
 
 blockquote
     +quote($yellow)
