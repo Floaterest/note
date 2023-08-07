@@ -21,18 +21,15 @@
         @apply text-#{$accent} capitalize font-bold
 
 details
-    overflow-x: auto
-    overflow-y: hidden
-    +prefixed(theorem, $teal)
-    +prefixed(example, $orange)
-    +prefixed(definition, $sky)
-    +prefixed(algorithm, $pink)
-
-    +framed('teal', $teal)
-    +framed('orange', $orange)
-    +framed('sky', $sky)
-    +framed('pink', $pink)
-    +framed('yellow', $yellow)
+    @apply overflow-x-auto overflow-y-hidden
+    +prefixed(theorem, 'teal')
+    +prefixed(definition, 'sky')
+    +prefixed(example, 'orange')
+    +prefixed(algorithm, 'pink')
+    +framed('teal', 'teal')
+    +framed('orange', 'orange')
+    +framed('sky', 'sky')
+    +framed('pink', 'pink')
 
 summary
     cursor: pointer
