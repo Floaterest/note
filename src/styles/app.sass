@@ -4,3 +4,13 @@
 
 .list-none ul
     list-style: none
+
+.two // 2d table
+    th
+        @apply hidden
+    tbody > tr:first-child, tr > td:first-child
+        @apply border-0 border-white border-solid
+    tbody > tr:first-child
+        @apply border-b
+    tr > td:first-child
+        @apply border-r
