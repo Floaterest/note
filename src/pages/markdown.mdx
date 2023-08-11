@@ -41,3 +41,23 @@ inline <abbr title="Hypertext Markup Language">HTML</abbr> tags
 | left  | center | right |
 | left  | center | right |
 | left  | center | right |
+
+
+# MDX
+
+line\
+break
+
+---
+
+export const Item = ({i}) => <li>{i.toString().padStart(2,'0')}</li>
+
+evaluate jsx:
+
+<ul>
+{
+Array.from(Array(10), (_, i) => i)
+    .filter(i => i & 1)
+    .map(i => <Item i={i} />)
+}
+</ul>
