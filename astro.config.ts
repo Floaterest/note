@@ -13,8 +13,14 @@ const katex = {
     fleqn: false,
     strict: false,
 };
+
 const theme = await shiki.loadTheme(path.join(process.cwd(), 'public/theme.json'));
 
+const tailw: any = {
+    config: {
+        applyBaseStyles: false,
+    },
+};
 
 // https://astro.build/config
 export default defineConfig({
@@ -31,9 +37,5 @@ export default defineConfig({
         remarkPlugins: [remarkMath],
         rehypePlugins: [() => rehypeKatex(katex)],
     },
-    integrations: [svelte(), relativeLinks(), mdx(), tailwind({
-        config: {
-            applyBaseStyles: false,
-        },
-    })],
+    integrations: [svelte(), relativeLinks(), mdx(), tailwind(tailw)],
 });
