@@ -50,27 +50,15 @@ jobs:
 
       - name: List dist
         run: tree dist
-  #     - uses: actions/upload-pages-artifact@v1
-  #       with: { name: github-pages, path: dist }
+      - uses: actions/upload-pages-artifact@v1
+        with: { name: github-pages, path: dist }
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-
-  #   # Github Pages
-  #   environment:
-  #     name: github-pages
-  #     url: ${{ steps.deployment.outputs.page_url }}
-  #   steps:
-  #     - id: deployment
-  #       uses: actions/deploy-pages@v1
-
-    # steps:
-    #   - uses: actions/download-artifact@v3
-    #     with: { name: github-pages }
-    #   - run: tree -L 3
-    #   - name: Upload to Deno Deploy
-    #     uses: denoland/deployctl@v1
-    #     with:
-    #       project: '***'
-    #       entrypoint: entry.ts
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v1
