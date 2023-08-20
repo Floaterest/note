@@ -26,7 +26,9 @@ jobs:
         id: graphics
         uses: actions/cache@v3
         with:
-          path: dist/**/*.svg
+          path:
+            - dist/**/*.svg
+            - dist/**/*.pdf
           key: Graphics-${{ hashFiles('dist/**/.tex') }}
           restore-keys: Graphics-
 
