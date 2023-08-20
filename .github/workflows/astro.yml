@@ -40,7 +40,7 @@ jobs:
           restore-keys: Tectonic-
 
       - name: List cached files
-        run: 'if [ -d dist ]; then tree dist; done'
+        run: if [ -d dist ]; then tree dist; fi
 
       - name: Build
         run: pnpm run build
