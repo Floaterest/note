@@ -46,7 +46,7 @@ jobs:
         run: pnpm run build
 
       - name: Remove PDF/SVG with no source files
-        run: ./script.sh | xargs -t -I{} rm -rf '{}.pdf' '{}.svg
+        run: ./script.sh | xargs -t -I{} rm -rf '{}.pdf' '{}.svg'
 
       - name: List dist
         run: tree dist
