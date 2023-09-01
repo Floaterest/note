@@ -1,53 +1,36 @@
-@use '@floaterest/color' as *
-@use 'html' as *
-
-@mixin darken-background($accent)
-    background: rgba($accent, 0.10)
-
-@mixin quote($accent)
-    padding: 0 $pad
-    +darken-background($accent)
-    margin: 0
-    border-left: $border-left solid $accent
+$pad: 1em
+$border: 0.25em
 
 @mixin framed($selector, $accent)
     &.#{$selector}
-        +quote($accent)
-        padding-top: 0
-        strong
-            color: $accent
+        border-left: $border solid
+        padding: 0 $pad
+        @apply border-#{$accent} bg-#{$accent}/10 dark:bg-#{$accent}/5
+        strong, .color
+            @apply text-#{$accent}
         & > summary
-            +darken-background($accent)
-            white-space: nowrap
+            @apply whitespace-nowrap block
+            @apply bg-#{$accent}/[0.15]
             padding: $pad * 0.5
-            display: block
-            margin-left: -$pad
-            margin-right: -$pad
+            margin: 0 (-$pad)
+
 
 @mixin prefixed($selector, $accent)
     +framed($selector, $accent)
     &.#{$selector} > summary::before
         content: '#{$selector}. '
-        text-transform: capitalize
-        font-weight: bold
-        color: $accent
-
-blockquote
-    +quote($yellow)
+        @apply text-#{$accent} capitalize font-bold
 
 details
-    overflow-x: auto
-    overflow-y: hidden
-    +prefixed(theorem, $teal)
-    +prefixed(example, $orange)
-    +prefixed(definition, $sky)
-    +prefixed(algorithm, $pink)
-
-    +framed('teal', $teal)
-    +framed('orange', $orange)
-    +framed('sky', $sky)
-    +framed('pink', $pink)
-    +framed('yellow', $yellow)
+    @apply overflow-x-auto overflow-y-hidden
+    +prefixed(theorem, 'teal')
+    +prefixed(definition, 'sky')
+    +prefixed(example, 'orange')
+    +prefixed(algorithm, 'pink')
+    +framed('teal', 'teal')
+    +framed('orange', 'orange')
+    +framed('sky', 'sky')
+    +framed('pink', 'pink')
 
 summary
-    cursor: pointer
+    @apply cursor-pointer
