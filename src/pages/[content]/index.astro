@@ -1,13 +1,7 @@
 ---
+import Main from "../../layouts/Main.astro";
 import { getCollection } from "astro:content";
-import type { MarkdownHeading } from "astro";
 import { collections } from "../../content/config";
-
-import Layout from "../../layouts/Layout.astro";
-import List from "../../components/List.astro";
-import Entry from "../../components/Entry.svelte";
-import Accordion from "@smui-extra/accordion";
-import Top from "../../components/Top.svelte";
 
 export const getStaticPaths = () =>
     Object.keys(collections).map((content) => ({
@@ -16,80 +10,14 @@ export const getStaticPaths = () =>
 
 const { content: title } = Astro.params;
 const entries = await getCollection(title);
-type H = {
-    href?: string;
-    text?: string;
-    children: H[];
-    parent: H | undefined;
-};
-
-const headings: H = { children: [], parent: undefined };
-let cur = headings;
-let depth = 0;
-
-function push({ depth: d, slug, text }: MarkdownHeading) {
-    // if is content, link to sub page
-    const href = d == 1 ? slug.replace(title + "/", "") + "/" : "#" + slug;
-    if (d < depth) {
-        // push to parent's parent's children
-        const arr = cur.parent?.parent?.children;
-        cur = {
-            href,
-            text,
-            parent: cur.parent?.parent,
-            children: [],
-        };
-        arr?.push(cur);
-    } else if (d > depth) {
-        // push to its children
-        const arr = cur.children;
-        cur = {
-            href,
-            text,
-            parent: cur,
-            children: [],
-        };
-        arr?.push(cur);
-    } else {
-        // push to parent's children
-        const arr = cur.parent?.children;
-        cur = {
-            href,
-            text,
-            parent: cur.parent,
-            children: [],
-        };
-        arr?.push(cur);
-    }
-    depth = d;
-}
-
-const contents = await Promise.all(
-    entries
-        .map(async ({ slug, data: { title }, render }) => {
-            const { Content, headings: hs } = await render();
-            push({ depth: 1, slug, text: title });
-            hs.forEach(push);
-            return { title, Content };
-        })
-        .reverse()
-);
-
-headings.children.reverse();
 ---
 
-<Layout content={{ title }}>
-    <!-- <Top client:load value={title} collections={Object.keys(collections)}> -->
-    <Top client:load value={title}>
-        <List slot="drawer" {headings} />
-        <Accordion client:load multiple slot="content">
-            {
-                contents.map(({ title, Content }) => (
-                    <Entry {title} client:load>
-                        <Content />
-                    </Entry>
-                ))
-            }
-        </Accordion>
-    </Top>
-</Layout>
+<Main {title}>
+    {
+        entries.map(({ slug, data: { title } }) => (
+            <h1>
+                <a href={`./${slug}/`}>{title}</a>
+            </h1>
+        ))
+    }
+</Main>
