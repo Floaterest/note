@@ -1,0 +1,63 @@
+---
+title: Markdown
+layout: ../layouts/Markdown.astro
+---
+
+# Markdown
+
+normal **bold** _italic_ `monospace` ~~strikethrough~~
+
+
+```rs
+fn main() {
+    println!("Code block");
+}
+```
+
+---
+
+- ul item 1
+- ul item 2
+
+---
+
+1. ol item 1
+1. ol item 2
+
+---
+
+[link](unvisited)
+
+[visited link](.)
+
+---
+
+> blockquote
+
+inline <abbr title="Hypertext Markup Language">HTML</abbr> tags
+
+| table | header | header |
+|-|:-:|-:|
+| left  | center | right |
+| left  | center | right |
+| left  | center | right |
+
+
+# MDX
+
+line\
+break
+
+---
+
+export const Item = ({i}) => <li>{i.toString().padStart(2,'0')}</li>
+
+evaluate jsx:
+
+<ul>
+{
+Array.from(Array(10), (_, i) => i)
+    .filter(i => i & 1)
+    .map(i => <Item i={i} />)
+}
+</ul>
