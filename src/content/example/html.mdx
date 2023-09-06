@@ -1,6 +1,33 @@
 ---
-title: Collapsable Details
+title: Custom HTML Components
 ---
+
+import Code from '../../components/Code.astro'
+
+list-style-type
+
+<div class="list-none">
+- a <Code code="<ul>" lang="html"/> element
+- with
+- no
+- list-style-type
+</div>
+
+---
+
+2D tables
+
+<div class="two">
+
+|||||
+|:-:|:-:|:-:|:-:|
+||x0|x1|x2
+|y0|(0,0)|(1,0)|(2,0)
+|y1|(0,1)|(1,1)|(2,1)
+
+</div>
+
+## Details
 
 <details class="definition" open>
 <summary>Monad</summary>
