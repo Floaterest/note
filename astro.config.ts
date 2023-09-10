@@ -5,6 +5,7 @@ import relativeLinks from 'astro-relative-links';
 import { defineConfig } from 'astro/config';
 import * as path from 'path';
 import rehypeKatex from 'rehype-katex';
+import { remarkExtendedTable, extendedTableHandlers } from 'remark-extended-table';
 import remarkMath from 'remark-math';
 import shiki from 'shiki';
 
@@ -34,8 +35,9 @@ export default defineConfig({
         shikiConfig: {
             theme,
         },
-        remarkPlugins: [remarkMath],
+        remarkPlugins: [remarkMath, remarkExtendedTable],
         rehypePlugins: [() => rehypeKatex(katex)],
+        remarkRehype: { handlers: Object.assign({}, extendedTableHandlers) },
     },
     integrations: [svelte(), relativeLinks(), mdx(), tailwind(tailw)],
 });
