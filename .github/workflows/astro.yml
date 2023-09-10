@@ -1,0 +1,70 @@
+name: Build Astro
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: floaterest/note:latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: pnpm/action-setup@v2.2.4
+        with: { version: latest }
+      - uses: actions/setup-node@v3
+        with: { node-version: latest, cache: pnpm }
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache graphics
+        id: graphics
+        uses: actions/cache@v3
+        with:
+          path: |
+            dist/**/*.svg
+            dist/**/*.pdf
+          key: Graphics-${{ hashFiles('dist/**/.tex') }}
+          restore-keys: Graphics-
+
+      - name: Cache Tectonic packages
+        if: steps.graphics.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        id: tectonic
+        with:
+          path: ~/.cache/Tectonic
+          key: Tectonic-${{ hashFiles('dist/**/.tex') }}
+          restore-keys: Tectonic-
+
+      - name: List cached files
+        run: if [ -d dist ]; then tree dist; fi
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Remove PDF/SVG with no source files
+        run: ./script.sh | xargs -t -I{} rm -rf '{}.pdf' '{}.svg'
+
+      - name: List dist
+        run: tree dist
+      - uses: actions/upload-pages-artifact@v1
+        with: { name: github-pages, path: dist }
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
