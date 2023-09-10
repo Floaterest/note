@@ -23,6 +23,7 @@
     "@floaterest/iosevka": "^1.0.0",
     "katex": "^0.16.8",
     "rehype-katex": "^6.0.3",
+    "remark-extended-table": "^1.1.0",
     "remark-math": "^5.1.1",
     "sass": "^1.66.1",
     "shiki": "^0.14.4",

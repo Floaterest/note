@@ -1,0 +1,19 @@
+---
+import { write } from "./Latex";
+import Animation from "./Animation.svelte";
+
+export interface Props {
+    pages: number;
+}
+
+let { pages } = Astro.props;
+
+const base = await write(
+    tikz,
+    await Astro.slots.render("default"),
+    "beamer, tikz",
+    pages
+);
+---
+
+<Animation {pages} {base} client:load />
