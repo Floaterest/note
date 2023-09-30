@@ -1,0 +1,19 @@
+code
+    @apply whitespace-pre leading-4
+    font-family: 'Iosevka Web', 'UD Digi Kyokasho NK-R', monospace
+
+// make Code.astro inline
+pre.shiki
+    @apply inline
+
+.line
+    pre.astro-code
+        @apply leading-normal
+    pre.astro-code > code
+        // line number
+        counter-reset: step
+        counter-increment: step 0
+        span.line::before
+            @apply mr-4 w-4 inline-block text-right text-lighter
+            content: counter(step)
+            counter-increment: step

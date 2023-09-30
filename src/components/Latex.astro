@@ -1,0 +1,35 @@
+---
+import { write } from "./Latex";
+import type { LatexConfig } from "./Latex";
+
+export interface Props {
+    preamble: string | string[];
+    standalone: string;
+}
+
+let { preamble = [], standalone = "", ...props } = Astro.props;
+
+const latex = (await Astro.slots.render("default"))
+    .replace(/&#39;/g,"'")
+    .replace(/&quot;/g,'"')
+
+const cfg: LatexConfig = {
+    preamble,
+    standalone,
+    latex,
+    path: Astro.url.pathname,
+};
+
+const alt = await write(cfg);
+const src = `${alt}.svg`;
+---
+
+{
+    /*<picture>
+    <source {srcset} type="image/svg+xml" />
+    <img src={svg} alt={tex.substring(0, 7)} {...props} class="tikz" />
+</picture>
+*/
+}
+
+<img class="dark:invert max-w-full text-black" {src} {alt} {...props}/>

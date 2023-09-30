@@ -1,0 +1,18 @@
+---
+import Latex from "./Latex.astro";
+
+export interface Props {
+    preamble?: string;
+    class: string;
+}
+
+const { preamble: pre, class: c = "", ...props } = Astro.props;
+const preamble = [
+    '\\usetikzlibrary{arrows.meta}',
+    pre
+];
+---
+
+<div class="flex justify-center">
+<Latex class={'tikz '+c} {preamble} {...props} standalone={'tikz'}><slot /></Latex>
+</div>

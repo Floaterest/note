@@ -1,0 +1,88 @@
+---
+title: Custom HTML Components
+---
+
+import Code from '../../components/Code.astro'
+
+list-style-type
+
+<div class="list-none">
+- a <Code code="<ul>" lang="html"/> element
+- with
+- no
+- list-style-type
+</div>
+
+---
+
+2D tables
+
+<div class="two">
+
+|||||
+|:-:|:-:|:-:|:-:|
+||x0|x1|x2
+|y0|(0,0)|(1,0)|(2,0)
+|y1|(0,1)|(1,1)|(2,1)
+
+</div>
+
+## Details
+
+<details class="definition" open>
+<summary>Monad</summary>
+A monad is a monoid in the category of endofunctors.
+</details>
+
+<details class="theorem" open>
+<summary>The Three Isomorphism theorems</summary>
+
+1. If $\varphi:G\to G'$ is a group homomorphism, then
+  $$
+  G/\ker\varphi\cong \varphi(G)
+  $$
+2. If $H\le G$ and $N\triangleleft G$, then
+  $$
+  H/(H\cap N)\cong HN/N
+  $$
+3. If $K,N\triangleleft G$ and $K\le N$, then
+  $$
+  (G/K)/(N/K)\cong G/N
+  $$
+</details>
+
+<details class="example list-none" open>
+<summary>Show that any normal subgroup is the kernel of some homomorphism</summary>
+**Proof.** Let any $N\triangleleft G$, define $\varphi:G\to G/N$ by $\varphi(g)=gN$ for any $g\in G$
+
+WTS $\varphi$ is homomorphism
+- Let any $a,b\in G$, wts $\varphi(ab)=\varphi(a)\varphi(b)$
+$$
+\begin{aligned}
+\because&&(aN)(bN)&=(ab)N\\
+\therefore&&\varphi(a)\varphi(b)&=(aN)(bN)=(ab)N=\varphi(ab)
+\end{aligned}
+$$
+- $\therefore\varphi$ is homomorphism as wanted.
+
+WTS $N=\ker\varphi$, consider any $g\in G$
+
+$$
+\begin{aligned}
+  \because&& g\in\ker\varphi&\iff N=\varphi(g)=gN\iff g\in N\\
+  \therefore&&\ker\varphi&=N
+\end{aligned}
+$$
+
+$\therefore N=\ker\varphi$, that is, the kernel of some homomorphism $\quad\square$
+
+</details>
+
+<details class="algorithm" open>
+<summary>Show Language $L$ is in $NP$</summary>
+1. Show $L$ is a decision problem.
+2. For any $w\in L$, provide a certificate $c$ of $w$.
+3. Show $c$ is polynomial in size with respect to $|w|$.
+4. Provide a verifier $V$ that decides $\langle w,c\rangle$.
+5. Show $V$ runs in polynomial time.
+</details>

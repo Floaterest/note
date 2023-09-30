@@ -1,26 +1,33 @@
 ---
-import { getCollection, getEntryBySlug } from "astro:content";
+import type { GetStaticPaths } from "astro";
+import Main from "../../layouts/Main.astro";
+import { getCollection } from "astro:content";
 import { collections } from "../../content/config";
 
-import Main from "../../layouts/Main.astro";
+export const getStaticPaths = (async () => {
+    let arr = [];
+    for (const content in collections) {
+        const c = await getCollection(content as any);
+        arr.push(
+            ...c.map((entry: any) => ({
+                params: { content, slug: entry.slug },
+                props: { entry },
+            })),
+        );
+    }
+    return arr;
+}) satisfies GetStaticPaths;
 
-export const getStaticPaths = async () =>
-    await Promise.all(
-        Object.keys(collections).flatMap(async (content) =>
-            (
-                await getCollection(content)
-            ).map(({ slug }) => ({ params: { content, slug } }))
-        )
-    );
-const { content, slug } = Astro.params;
 const {
-    data: { title },
-    render,
-} = (await getEntryBySlug(content, slug))!;
-const { Content, headings } = await render();
+    entry: {
+        render,
+        data: { title },
+    },
+} = Astro.props;
+const { Content, headings: _ } = await render();
 ---
 
-<Main content={{ title }}>
-    <h1><a href="/" class="material-icons-round">home</a> {title}</h1>
+<Main {title}>
+    <h1><a href="../">{title}</a></h1>
     <Content />
 </Main>

@@ -1,9 +1,26 @@
 ---
-import { getHighlighter } from './Shiki';
-import theme from '../../theme.json';
+import { getHighlighter } from "astro/components/Shiki";
+import type { ILanguageRegistration } from "shiki";
+import theme from "../../public/theme.json";
+
+export interface Props {
+    code: string;
+    lang?: string | ILanguageRegistration;
+}
 const { code, lang } = Astro.props;
-const highlighter = await getHighlighter({ theme });
-const html = highlighter.codeToHtml(code, { lang });
+
+const highlighter = await getHighlighter({
+    theme,
+    langs: [lang],
+});
+const html = highlighter.codeToHtml(code, lang.id ?? lang);
+// console.log(lang);
+// const tokens = highlighter.codeToThemedTokens(code, lang);
+// for (const { explanation } of tokens.flat()) {
+//     for (const { content, scopes } of explanation) {
+//         console.log({ content, scopes });
+//     }
+// }
 ---
 
 <Fragment set:html={html} />
