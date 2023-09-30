@@ -2,25 +2,50 @@
 import Main from "../layouts/Main.astro";
 import { getCollection } from "astro:content";
 import { collections } from "../content/config";
-import Menu from "../components/Menu.svelte";
 
-const map = new Map<string, { href: string; title: string }[]>(
-    await Promise.all(
-        Object.keys(collections).map(async (content) => [
-            content,
-            (
-                await getCollection(content)
-            ).map(({ slug, data: { title } }) => ({
-                href: slug + "/",
-                title,
-            })),
-        ])
-    )
+const contents = new Map<string, { href: string; title: string }[]>();
+
+for (const content in collections) {
+	const c = await getCollection(content as any);
+	contents.set(
+		content,
+		c.map(({ slug, collection, data: { title } }) => ({
+			href: `./${collection}/${slug}/`,
+			title,
+		})),
+	);
+}
+
+const other = (await Astro.glob("/src/pages/*.{mdx,md}")).map(
+	({ url, frontmatter: { title } }) => ({
+		href: "." + url,
+		title,
+	})
 );
-
-const content = { title: "note" };
 ---
 
-<Main {content}>
-    <Menu {map} client:load />
+<Main title="note">
+	<ul>
+		{
+            other.map(({ href, title }) => (
+                <li>
+                    <a {href}>{title}</a>
+                </li>
+            ))
+        }
+		{
+			Array.from(contents.entries()).map(([name, content]) => (
+				<li>
+					<a href={`./${name}/`}>{name}</a>
+					<ul>
+						{content.map(({ href, title }) => (
+							<li>
+								<a {href}>{title ?? href}</a>
+							</li>
+						))}
+					</ul>
+				</li>
+			))
+		}
+	</ul>
 </Main>
