@@ -1,12 +1,15 @@
 ---
-import "../styles/smui.css";
-import "../styles/app.sass";
+import "katex/dist/katex.min.css";
 import "@floaterest/iosevka/iosevka.css";
+import "../styles/app.sass";
+import "../styles/html.sass";
+import "../styles/code.sass";
+import "../styles/katex.sass";
+import "../styles/details.sass";
+
 import favicon from "/favicon.png";
 
-const {
-    content: { title },
-} = Astro.props;
+const { title } = Astro.props;
 
 const katex = {
     rel: "stylesheet",
@@ -15,7 +18,7 @@ const katex = {
 };
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
