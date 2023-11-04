@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "docker": "sudo docker build -t floaterest/note .",
+    "docker": "sudo buildx build -t floaterest/note .",
     "push": "sudo docker push floaterest/note"
   },
   "dependencies": {
