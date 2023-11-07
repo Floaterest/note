@@ -3,19 +3,16 @@ import svelte from '@astrojs/svelte';
 import tailwind from '@astrojs/tailwind';
 import relativeLinks from 'astro-relative-links';
 import { defineConfig } from 'astro/config';
-import * as path from 'path';
 import rehypeKatex from 'rehype-katex';
 import { remarkExtendedTable, extendedTableHandlers } from 'remark-extended-table';
 import remarkMath from 'remark-math';
-import shiki from 'shiki';
+import theme from './theme.json'
 
 const katex = {
     trust: true,
     fleqn: false,
     strict: false,
 };
-
-const theme = await shiki.loadTheme(path.join(process.cwd(), 'public/theme.json'));
 
 const tailw: any = {
     config: {
