@@ -1,7 +1,13 @@
 ---
 import Layout from "./Layout.astro";
+export interface Props {
+	title: string;
+}
 ---
 
 <Layout {...Astro.props}>
     <main><slot /></main>
+	<footer class="flex justify-center print:hidden">
+        <p>{(new Date()).toISOString().substring(0, 19).replace('T', ' ')}</p>
+    </footer>
 </Layout>
