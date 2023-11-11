@@ -3,11 +3,11 @@ import { write } from "./Latex";
 import type { LatexConfig } from "./Latex";
 
 export interface Props {
-    preamble: string | string[];
-    standalone: string;
+    preamble: string[];
+    classes: string[];
 }
 
-let { preamble = [], standalone = "", ...props } = Astro.props;
+let { preamble = [],  classes } = Astro.props;
 
 const latex = (await Astro.slots.render("default"))
     .replace(/&#39;/g,"'")
@@ -15,7 +15,6 @@ const latex = (await Astro.slots.render("default"))
 
 const cfg: LatexConfig = {
     preamble,
-    standalone,
     latex,
     path: Astro.url.pathname,
 };
@@ -32,4 +31,4 @@ const src = `${alt}.svg`;
 */
 }
 
-<img class="dark:invert max-w-full text-black" {src} {alt} {...props}/>
+<img class:list={classes} {src} {alt}/>

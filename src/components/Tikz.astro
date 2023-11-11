@@ -2,17 +2,19 @@
 import Latex from "./Latex.astro";
 
 export interface Props {
-    preamble?: string;
-    class: string;
+    preamble?: string | string[];
+    class?:string
 }
 
-const { preamble: pre, class: c = "", ...props } = Astro.props;
+const { preamble: pre = [], class:c=""} = Astro.props;
 const preamble = [
+    '\\usepackage{tikz}',
     '\\usetikzlibrary{arrows.meta}',
-    pre
+    '\\definecolor{red}{HTML}{c63a44}',
+    ...typeof pre === 'string' ? [pre] : pre
 ];
 ---
 
 <div class="flex justify-center">
-<Latex class={'tikz '+c} {preamble} {...props} standalone={'tikz'}><slot /></Latex>
+<Latex classes={['tikz',c]} {preamble}><slot /></Latex>
 </div>
