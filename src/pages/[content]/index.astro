@@ -3,21 +3,32 @@ import Main from "../../layouts/Main.astro";
 import { getCollection } from "astro:content";
 import { collections } from "../../content/config";
 
-export const getStaticPaths = () =>
-    Object.keys(collections).map((content) => ({
-        params: { content },
-    }));
+export const getStaticPaths = async () =>
+     Object.keys(collections).map((content) => ({
+          params: { content },
+     }));
 
 const { content: title } = Astro.params;
-const entries = await getCollection(title);
+const entries = await getCollection(title as any);
 ---
 
 <Main {title}>
-    {
-        entries.map(({ slug, data: { title } }) => (
-            <h1>
-                <a href={`./${slug}/`}>{title}</a>
-            </h1>
-        ))
-    }
+    <h1 class="capitalize"><a href="..">{title}</a></h1>
+     {
+        /*
+          entries.map(async ({ slug, data: { title }, render }) => {
+               const { Content } = await render();
+               return (
+                    <>
+                         <h2>
+                              <a href={`./${slug}/`}>{title}</a>
+                         </h2>
+                         <Content />
+                    </>
+               );
+          })
+        */
+       // @ts-ignore
+        entries.map(({ slug, data: { title }}) => <h2><a href={`./${slug}/`}>{title}</a></h2>)
+     }
 </Main>
