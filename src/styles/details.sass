@@ -4,16 +4,13 @@ $border: 0.25em
 @mixin framed($selector, $accent)
     &.#{$selector}
         border-left: $border solid
-        padding: 0 $pad
         @apply border-#{$accent} bg-#{$accent}/10 dark:bg-#{$accent}/5
         strong, .color
             @apply text-#{$accent}
         & > summary
             @apply whitespace-nowrap block
             @apply bg-#{$accent}/[0.15]
-            padding: $pad * 0.5
-            margin: 0 (-$pad)
-
+            padding: $pad
 
 @mixin prefixed($selector, $accent)
     +framed($selector, $accent)
@@ -23,6 +20,8 @@ $border: 0.25em
 
 details
     @apply overflow-x-auto overflow-y-hidden
+    padding-left: $pad
+
     +prefixed(theorem, 'teal')
     +prefixed(definition, 'sky')
     +prefixed(example, 'orange')
@@ -34,3 +33,4 @@ details
 
 summary
     @apply cursor-pointer
+    margin-left: -$pad
