@@ -1,20 +1,19 @@
 ---
 import Main from "../layouts/Main.astro";
-import { getCollection } from "astro:content";
-import { collections } from "../content/config";
+import {collections} from '../content/config';
+import {getCollection} from 'astro:content';
 
-const contents = new Map<string, { href: string; title: string }[]>();
-
-for (const content in collections) {
-	const c = await getCollection(content as any);
-	contents.set(
-		content,
-		c.map(({ slug, collection, data: { title } }) => ({
+const contents = new Map<string, { href: string; title: string }[]>(
+	await Promise.all(Object.keys(collections).map(
+		async (content:any):Promise<[string, { href: string; title: string }[]]> => [
+		content ,
+		// @ts-ignore
+		(await getCollection(content)).map(({slug, collection, data:{title}})=>({
 			href: `./${collection}/${slug}/`,
 			title,
-		})),
-	);
-}
+		}))
+	]))
+);
 
 const other = (await Astro.glob("/src/pages/*.{mdx,md}")).map(
 	({ url, frontmatter: { title } }) => ({
@@ -24,26 +23,28 @@ const other = (await Astro.glob("/src/pages/*.{mdx,md}")).map(
 );
 ---
 
-<Main title="note">
+<Main title="Note">
 	<ul>
-		{
-            other.map(({ href, title }) => (
-                <li>
-                    <a {href}>{title}</a>
-                </li>
-            ))
-        }
 		{
 			Array.from(contents.entries()).map(([name, content]) => (
 				<li>
 					<a href={`./${name}/`}>{name}</a>
 					<ul>
-						{content.map(({ href, title }) => (
-							<li>
-								<a {href}>{title ?? href}</a>
-							</li>
-						))}
+						{
+							content.map(({ href, title }) => (
+								<li>
+									<a {href}>{title ?? href}</a>
+								</li>
+							))
+						}
 					</ul>
+				</li>
+			))
+		}
+		{
+			other.map(({ href, title }) => (
+				<li>
+					<a {href}>{title}</a>
 				</li>
 			))
 		}
