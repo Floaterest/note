@@ -1,8 +1,13 @@
 $pad: 1.5em
+$shift: 1em
 
 dl, ul, ol
     padding-left: $pad
 
+details.shift
+    padding-left: $shift
+    summary
+        margin-left: -$shift
 
 html
     @apply text-black text-lg bg-white leading-normal
