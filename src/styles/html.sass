@@ -4,6 +4,10 @@ $shift: 1em
 dl, ul, ol
     padding-left: $pad
 
+[title]:not([title=""])
+    @apply underline decoration-dotted
+
+
 details.shift
     padding-left: $shift
     summary
