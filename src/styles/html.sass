@@ -48,8 +48,10 @@ table
     @apply border-collapse whitespace-nowrap
 tbody
     @apply divide-solid divide-dark divide-x-0 divide-y
-thead > tr:last-child th
-    // only bottom border
+th:empty
+    @apply hidden
+thead > tr:last-child th:not(:empty)
     @apply border-0 border-b border-solid
 td, th
     @apply p-2
+
