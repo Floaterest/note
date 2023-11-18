@@ -44,10 +44,7 @@ jobs:
         run: bun run build
 
       - name: Remove PDF/SVG with no source files
-        run: >
-        comm -23 <(find dist -name  '*.pdf' | cut -d"." -f1 | sort)
-                 <(find dist -name  '*.tex' | cut -d"." -f1 | sort)
-        | xargs -t -I{} rm -rf '{}.pdf' '{}.svg'
+        run: ./script.sh | xargs -t -I{} rm -rf '{}.pdf' '{}.svg'
 
       - name: List dist
         run: tree dist
