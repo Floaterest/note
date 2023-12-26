@@ -8,26 +8,32 @@ const TECTONIC = '/usr/local/bin/tectonic';
 const DIST = 'dist';
 const PUBLIC = 'public';
 
+const PREAMBLE = String.raw`\documentclass{standalone}
+\usepackage{xcolor,amsmath,amssymb,amsfonts}
+\usepackage{fontspec}
+\usepackage[T1]{fontenc}
+\usepackage[tt=false, type1=true]{libertine}
+\usepackage[libertine]{newtxmath}
+`;
+
 export type LatexConfig = {
-    preamble: string | string[];
+    preamble: string[];
     latex: string;
-    standalone: string;
     path: string;
     pages?: number;
 }
 
 function unsanitise(s: string) {
-    return s.replace(/^\s*\$\$\s*/, "").replace(/\s*\$\$\s*$/, "").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+    // return s.replace(/^\s*\$\$\s*/, "").replace(/\s*\$\$\s*$/, "").replace(/&gt;/g, ">").replace(/&lt;/g, "<");
+    return s.replace(/&gt;/g, ">").replace(/&lt;/g, "<");
 }
 
 // export async function write(preamble: string | string[], latex: string, standalone: string, pages = 1): Promise<string> {
-export async function write({ preamble, latex, standalone, path, pages }: LatexConfig): Promise<string> {
-    if (typeof preamble === 'string') preamble = [preamble];
+export async function write({ preamble, latex, path, pages }: LatexConfig): Promise<string> {
     pages = pages || 1;
     // remove $$ prefix/suffix
     const content = [
-        `\\documentclass${standalone ? `[${standalone}]` : ''}{standalone}`,
-        '\\usepackage{xcolor, amsmath, amssymb}',
+        PREAMBLE,
         preamble.filter(Boolean).map(p => p.replace(/(^\$\$)|(\$\$$)/g, '')).join('\n'),
         '\\begin{document}',
         unsanitise(latex),

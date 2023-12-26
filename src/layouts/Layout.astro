@@ -3,31 +3,27 @@ import "katex/dist/katex.min.css";
 import "@floaterest/iosevka/iosevka.css";
 import "../styles/app.sass";
 import "../styles/html.sass";
-import "../styles/code.sass";
 import "../styles/katex.sass";
+import "../styles/shiki.sass";
 import "../styles/details.sass";
 
-import favicon from "/favicon.png";
+export interface Props {
+	title: string;
+}
 
 const { title } = Astro.props;
-
-const katex = {
-    rel: "stylesheet",
-    crossorigin: "anonymous",
-    href: "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css",
-};
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" href={favicon} />
-        <link {...katex} />
-        <title>{title}</title>
-    </head>
-    <body>
-        <slot />
-    </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body>
+		<slot />
+	</body>
 </html>
