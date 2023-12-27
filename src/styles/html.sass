@@ -1,5 +1,17 @@
+$pad: 1.5em
+$shift: 1em
+
 dl, ul, ol
-    padding-left: 1em
+    padding-left: $pad
+
+[title]:not([title=""])
+    @apply underline decoration-dotted
+
+
+details.shift
+    padding-left: $shift
+    summary
+        margin-left: -$shift
 
 html
     @apply text-black text-lg bg-white leading-normal
@@ -14,10 +26,17 @@ main
 h1, h2, h3
     @apply leading-tight dark:text-yellow print:text-yellow
 
+code
+    @apply whitespace-pre leading-4
+    font-family: 'Iosevka Web', 'UD Digi Kyokasho NK-R', monospace
+
 a
     @apply text-blue no-underline hover:underline
     @apply dark:text-yellow dark:hover:bg-darker dark:hover:text-white
     @apply visited:text-red dark:visited:text-light
+
+img
+    @apply dark:invert max-w-full text-black
 
 p, header, dl, ul, ol, pre
     @apply m-0
@@ -29,8 +48,10 @@ table
     @apply border-collapse whitespace-nowrap
 tbody
     @apply divide-solid divide-dark divide-x-0 divide-y
-thead > tr:last-child th
-    // only bottom border
+th:empty
+    @apply hidden
+thead > tr:last-child th:not(:empty)
     @apply border-0 border-b border-solid
 td, th
     @apply p-2
+
